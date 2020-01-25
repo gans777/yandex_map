@@ -1,0 +1,93 @@
+body {
+	padding: 20px;
+}
+
+.wrap_map {
+	position:relative;
+}
+.points_list {
+	display: flex;
+	flex-wrap: wrap;
+	border: 1px solid red;
+	background-color:#79c142;
+	min-height: 15px;
+}
+.point_price {
+	margin:3px;
+	background-color:#fcd134;
+}
+.info_point {
+	border: 1px solid green;
+	margin: 3px;
+	position: relative;
+}
+.info_point_on {
+	background-color:#fa2828;
+}
+
+/* выпадающее меню поинта */
+.toggle_name_point_dropdown_on {
+ background-color:#bada55;
+}
+.wrap_dropdown_info {
+	display: none;
+	position: absolute;
+	background-color:#bada55;;
+	z-index: 1;
+	width: 220px;
+	padding:5px;
+}
+.wrap_note_this{
+	display: flex;
+	border:1px solid #246e1f;
+	line-height: 1.1;
+	font-size: 15px;
+	padding: 3px;
+	background-color:#bada55;
+}
+.data_note {
+	font-size: 10px;
+	  display: flex;
+    justify-content: center; /*Центрирование по горизонтали*/
+    align-items: center;     /*Центрирование по вертикали */
+    margin-left: 4px;
+}
+.last_price {
+	display: flex;
+    justify-content: center; /*Центрирование по горизонтали*/
+    align-items: center;     /*Центрирование по вертикали */
+    margin-left:4px;
+}
+.wrap_button_point {
+	height: 40px;
+	width: 50%;
+	text-align: center;
+}
+.wrap_out_add_point {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 25px;
+	margin-top: 5px;
+}
+.wrap_add_comment_into_point {
+	display: none;
+	position: absolute;
+	z-index: 1;
+	background: rgb(73%, 85%, 33%, 0.9);
+	padding: 7px;
+}
+.one_point {
+	border: 1px solid green;
+}
+.point_list {
+	position: absolute;
+	right: 15%;
+	top:80px;
+	background-color: #e3c022;
+}
+
+/* записи в быллонах поинтов*/
+.wrap_note_this {
+	display: flex;
+	justify-content: center;
+}
