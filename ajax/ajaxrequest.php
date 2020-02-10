@@ -62,7 +62,7 @@ if ($_POST['label']=='save_new_marker_sql') {
     $comment=$_POST['description_point'];
     $lan=$_POST['lan'];
     $lng=$_POST['lng'];
-    $product='тофф++';
+    $product=$_POST['product'];
     $category='аптеки';
     $product_price=$_POST['product_price'];
     // подключение к mysql
@@ -126,7 +126,7 @@ if ($_POST['label']=='read_markers'){
 if ($_POST['label'] =='read_markers_sql'){
   
 	
-  $product='тофф++';
+  $product=$_POST['product'];
 
 
 $sql = "SELECT id_point,lan,lng,name FROM points WHERE product='".$product."'";
