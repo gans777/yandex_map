@@ -31,59 +31,84 @@ function init(){
     var object = e.get('target');
     var lan=e.get('target').geometry.getCoordinates()[0];
     var lng = e.get('target').geometry.getCoordinates()[1];
-        console.log('id этого поинта=  '+ e.get('target').options.get('id_point'));
-         var id_point=e.get('target').options.get('id_point');
-
-      //тут надо скрыть возможно открытое предыдущее окно у других маркеров!!!!
-      myMap.geoObjects.each(function(geoObject){ //восстановление цвета маркера на прежний и цвет маркера в центре карты
-                              
-                          if (geoObject.options.get('last_center')==1){
-                               geoObject.options.set({'last_center':0});
-                                geoObject.options.set({'iconColor': '#79c142'});// восстановление цвета маркера на прежний
-                          }
-                           if (id_point==geoObject.options.get('id_point')) {
-                              geoObject.options.set({'iconColor': '#bada55'});//цвет маркера в центре карты
-                               geoObject.options.set({'last_center':1});
-                           }
-          
-        });
-      var info_point=$("[id_point='"+id_point +"']");
-        var last_click_on_marker=info_point.find(".wrap_dropdown_info");
-         // last_click_on_marker.toggle();//css({'display':'block'});
-       if (!info_point.hasClass("toggle_name_point_dropdown_on")){
-            info_point.addClass("toggle_name_point_dropdown_on");
-             last_click_on_marker.css("display","block");
-            // last_click=last_click_on_marker;
-       } 
-      //stop here 16/02
-      //last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
-
-        /*
     $(".info_point_on").removeClass("info_point_on");
     $('[lan="'+lan+'"][lng="'+lng+'"]').addClass("info_point_on");
-    */
 
-// тут добавить выпадающее меню при клике по маркеру
   
    });
       
+     // var product="тофф++";
+    // var product=$(".products_name option:selected").text();
+    /*
+      $.ajax({   // расстановка маркеров на карте
+      	type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'read_markers_sql',
+              'product': $(".products_name option:selected").text()},
+           success: function(data){ 
+           	console.log('данные из базы'+data);
+            var all_markers = JSON.parse(data);
+            console.log(all_markers);
+             var count=1;
+            all_markers.forEach(function(value){
+            	var size = Object.keys(value).length;
+            console.log("длина массива="+ size);
+            var note="";
+            note+="<button type='button' class='add_info btn btn-info'>Добавить инфо о цене.</button>";// добавка кнопки добовления комментариев
+            note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'>скрыть это </button>";
+            note+="<div class='wrap_add_comment_into_point'><div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
+        
+            // последние 4-е элемента объекта id_point, lan,lng, name - все остальное ЗАМЕТКИ(purchase_descr)-- поэтому вычитаем 5
+             for(var  i=(size-5);i >= 0;i--){
+            
+                note+= "<div class='wrap_note_this'><div class='note_this'>"+value[i].purchase_descr
+                + "</div><div class='data_note'>"+value[i].data_note+"</div><div class='last_price'>"+value[i].price+"р.</div>"+
+                 "</div>" ;
+                
+            // описание покупки для  показа в балоне маркера (описание покупки, время, цена)
+             }
+             
+            myMap.geoObjects.add(new ymaps.Placemark([Number(value.lan), Number(value.lng)], {
+            balloonContent: '<strong>'+ value.name+'</strong><br>'+ note
+        }, {
+            preset: 'islands#icon',
+            iconColor: '#34c72a'
+        },{
+          id_point: value.id_point 
+        }));
+            
+            $('.points_list').append('<div class="info_point" lan='+value.lan +' lng='+ value.lng +' id_point='+value.id_point+'><span>'+count+'.</span>'+value.name+
+              '<span class="point_price" alt="последняя цена">'+value[size-5].price+'р.</span><div class="wrap_dropdown_info">'+note+'</div></div>');
+            count++;
+            });
+            
 
+
+           } // end - расставляет все маркеры из базы
+          
+      });// end ajax - расстановки всех маркеров из базы
+     */
      read_markers_all(myMap); //расстановка всех маркеров по карте
 
     var last_click;
-    $(".points_list").delegate("div.info_point", "click", function(){ // Клик по названию Поинта- и выпадает меню с отзывами о покупках
+    $(".points_list").delegate("div", "click", function(){ // Клик по названию Поинта- и выпадает меню с отзывами о покупках
       
       if (last_click != undefined) { //скрывает открытое предыдущее окно 
         
        last_click.toggle();//скрывает или показывает выбранные элемент 
-       last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");//подсвечивает div.info_point
-     
+       last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
       }
       
       last_click=$(this).children(".wrap_dropdown_info");
       last_click.toggle();
       last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
-     
+       /*
+      if (last_click.children('.add_info').css('display') == 'none') {
+        last_click.children('.add_info').toggle();
+        last_click.children('.no_add_info').toggle();
+        last_click.find('.wrap_add_comment_into_point').toggle();
+      }
+        */
             
      // myMap.setCenter([45.0701, 37.0048]);
      var lan=Number($(this).attr('lan')); var lng=Number($(this).attr('lng'));//Данный Поинт оказывается в центре карты 
@@ -91,7 +116,8 @@ function init(){
 
         var id_point= $(this).attr('id_point');
        //here need to change color of marker
-          myMap.geoObjects.each(function(geoObject){ 
+        //console.log('zx= '+Object.keys(myMap.geoObjects));
+        myMap.geoObjects.each(function(geoObject){
                               
                           if (geoObject.options.get('last_center')==1){
                                geoObject.options.set({'last_center':0});
@@ -110,36 +136,33 @@ function init(){
 
 
       $(document).on('click', function(e){ // убирает выпадающее меню при клике МИМО МЕНЮ
-    /*    
     if (!(($(e.target).parents('.wrap_dropdown_info').length) || ($(e.target).hasClass('wrap_dropdown_info')) || ($(e.target).hasClass('toggle_name_point_dropdown_on'))
      || $(e.target).hasClass('point_price')|| $(e.target).hasClass('this_close_free_click') )) {
       console.log("клик не по открытому окну");
     
-     if (last_click != undefined) { //скрывает открытое предыдущее окно с случаями покупок товара 
-      last_click.toggle();// .toggle() скрывает или показывает выбранный элемент 
+     if (last_click != undefined) { //скрывает открытое предыдущее окно 
+      last_click.toggle();// .toggle() скрывает или показывает выбранные элемент 
         last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
+        // last_click.find(".wrap_add_comment_into_point").css('display','none');
+         /*  stop here 10.02
          
-         last_click.find(".wrap_add_comment_into_point").css('display','none');// скрывает внутренне окно добавления комментария
          if (last_click.find(".add_info").css('display') =='none') { 
            last_click.find(".no_add_info").css('display','none');
             last_click.find(".add_info").attr('style', '');
            }
-          
+          */ 
          
          last_click = undefined;
       }
     
     }
-    */
   });
 
 
   $(".points_list").delegate("button.add_info", "click", function(){ //клик по кнопке "добавить инфо о цене"
       var id_point=$(this).parent().parent().attr("id_point");
 console.log("id_point= "+ id_point);//номер id поинта
-//stop here 16.02 18:25
-console.log("клик по add_info");
-$("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").css("border","6px solid grey");//toggle();// показвает/скрывает меню добавления комментария
+$("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// показвает/скрывает меню добавления комментария
  $("[id_point='"+id_point+"']").find("button.add_info").toggle();// показывает/скрывает кнопку "добавить инфо о цене"
   $("[id_point='"+id_point+"']").find("button.no_add_info").toggle();
  });
@@ -308,6 +331,7 @@ console.log('должно скрыть');
         
         }//end init
    
+
   function read_markers_all(myMap) {
        $(".points_list").empty();//очистка списка точек
 
@@ -340,7 +364,7 @@ console.log('должно скрыть');
              }
              
             myMap.geoObjects.add(new ymaps.Placemark([Number(value.lan), Number(value.lng)], {
-            //balloonContent: '<strong>'+ value.name+'</strong><br>'+ note  //формирование балуна
+            balloonContent: '<strong>'+ value.name+'</strong><br>'+ note
         }, {
             preset: 'islands#icon',
             iconColor: '#79c142',// основной цвет маркеров
