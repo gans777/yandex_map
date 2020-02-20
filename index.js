@@ -9,8 +9,53 @@ function init(){
          read_markers_all(myMap);
   });
         // Создание карты.  
-        
-        var myMap = new ymaps.Map("map", {
+         var geolocation = ymaps.geolocation,
+        myMap = new ymaps.Map('map', {
+            center: [47.2313455, 39.7232855],
+            zoom: 12
+        }, {
+            searchControlProvider: 'yandex#search',
+            'hasBalloon': false
+        });
+
+    // Сравним положение, вычисленное по ip пользователя и
+    // положение, вычисленное средствами браузера.
+    geolocation.get({
+        provider: 'yandex',
+        mapStateAutoApply: false
+
+    }).then(function (result) {
+        // Красным цветом пометим положение, вычисленное через ip.
+        result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+        result.geoObjects.get(0).properties.set({
+            balloonContentBody: 'Мое местоположение вычисленное по ip'
+        });
+              
+        myMap.geoObjects.add(result.geoObjects);
+        myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());
+        // var lan=result.geoObjects.get(0).geometry.getCoordinates()[0];// так брать координаты
+    
+        myMap.setZoom(12);
+    });
+
+    geolocation.get({
+        provider: 'browser',
+        mapStateAutoApply: false
+    }).then(function (result) {
+        // Синим цветом пометим положение, полученное через браузер.
+        // Если браузер не поддерживает эту функциональность, метка не будет добавлена на карту.
+        result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
+        result.geoObjects.get(0).properties.set({
+            balloonContentBody: 'Мое местоположение вычисленное  браузером'
+        });
+        myMap.geoObjects.add(result.geoObjects);
+        myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());
+        myMap.setZoom(12);
+    });
+    
+         /*
+         //старое начало карты без геолокации
+         myMap = new ymaps.Map("map", {
             // Координаты центра карты.
             // Порядок по умолчанию: «широта, долгота».
             // Чтобы не определять координаты центра карты вручную,
@@ -19,10 +64,23 @@ function init(){
             // Уровень масштабирования. Допустимые значения:
             // от 0 (весь мир) до 19.
             zoom: 12
-        },{balloonMaxWidth: 250,
-           searchControlProvider: 'yandex#search'
+        },{
+          'hasBalloon': false
         });
-     
+        */
+/*
+       geolocation.get({
+        provider: 'yandex',
+        mapStateAutoApply: true
+    }).then(function (result) {
+        // Красным цветом пометим положение, вычисленное через ip.
+        result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+        result.geoObjects.get(0).properties.set({
+            balloonContentBody: 'Мое местоположение'
+        });
+        myMap.geoObjects.add(result.geoObjects);
+    });
+*/
         var balloon = null;
 
     myMap.geoObjects.events.add('click', function (e) { // при клике по баллону поинт меняет цвет -- может это и не НАДО???
@@ -31,63 +89,15 @@ function init(){
     var object = e.get('target');
     var lan=e.get('target').geometry.getCoordinates()[0];
     var lng = e.get('target').geometry.getCoordinates()[1];
+
+    /*
     $(".info_point_on").removeClass("info_point_on");
     $('[lan="'+lan+'"][lng="'+lng+'"]').addClass("info_point_on");
-
+     */
   
    });
       
-     // var product="тофф++";
-    // var product=$(".products_name option:selected").text();
-    /*
-      $.ajax({   // расстановка маркеров на карте
-      	type:'post',
-        url:'ajax/ajaxrequest.php',
-        data:{'label':'read_markers_sql',
-              'product': $(".products_name option:selected").text()},
-           success: function(data){ 
-           	console.log('данные из базы'+data);
-            var all_markers = JSON.parse(data);
-            console.log(all_markers);
-             var count=1;
-            all_markers.forEach(function(value){
-            	var size = Object.keys(value).length;
-            console.log("длина массива="+ size);
-            var note="";
-            note+="<button type='button' class='add_info btn btn-info'>Добавить инфо о цене.</button>";// добавка кнопки добовления комментариев
-            note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'>скрыть это </button>";
-            note+="<div class='wrap_add_comment_into_point'><div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
-        
-            // последние 4-е элемента объекта id_point, lan,lng, name - все остальное ЗАМЕТКИ(purchase_descr)-- поэтому вычитаем 5
-             for(var  i=(size-5);i >= 0;i--){
-            
-                note+= "<div class='wrap_note_this'><div class='note_this'>"+value[i].purchase_descr
-                + "</div><div class='data_note'>"+value[i].data_note+"</div><div class='last_price'>"+value[i].price+"р.</div>"+
-                 "</div>" ;
-                
-            // описание покупки для  показа в балоне маркера (описание покупки, время, цена)
-             }
-             
-            myMap.geoObjects.add(new ymaps.Placemark([Number(value.lan), Number(value.lng)], {
-            balloonContent: '<strong>'+ value.name+'</strong><br>'+ note
-        }, {
-            preset: 'islands#icon',
-            iconColor: '#34c72a'
-        },{
-          id_point: value.id_point 
-        }));
-            
-            $('.points_list').append('<div class="info_point" lan='+value.lan +' lng='+ value.lng +' id_point='+value.id_point+'><span>'+count+'.</span>'+value.name+
-              '<span class="point_price" alt="последняя цена">'+value[size-5].price+'р.</span><div class="wrap_dropdown_info">'+note+'</div></div>');
-            count++;
-            });
-            
-
-
-           } // end - расставляет все маркеры из базы
-          
-      });// end ajax - расстановки всех маркеров из базы
-     */
+ 
      read_markers_all(myMap); //расстановка всех маркеров по карте
 
     var last_click;
