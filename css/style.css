@@ -45,6 +45,9 @@ body {
 	padding: 3px;
 	background-color:#bada55;
 }
+.no_add_info {
+	text-align: right;
+}
 .data_note {
 	font-size: 10px;
 	  display: flex;

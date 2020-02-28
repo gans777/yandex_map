@@ -15,7 +15,7 @@ function init(){
             zoom: 12
         }, {
             searchControlProvider: 'yandex#search',
-            'hasBalloon': false
+            'hasBalloon': true
         });
 
     // Сравним положение, вычисленное по ip пользователя и
@@ -81,9 +81,11 @@ function init(){
         myMap.geoObjects.add(result.geoObjects);
     });
 */
-        var balloon = null;
+        var balloon = null;//странно- больше нигде не встречается
 
-    myMap.geoObjects.events.add('click', function (e) { // при клике по баллону поинт меняет цвет -- может это и не НАДО???
+          read_markers_all(myMap); //расстановка всех маркеров по карте
+
+    myMap.geoObjects.events.add('click', function (e) { // при клике по маркеру выпадает меню покупок дефицита
     
     // Получение ссылки на дочерний объект, на котором произошло событие.
     var object = e.get('target');
@@ -97,10 +99,7 @@ function init(){
   
    });
       
- 
-     read_markers_all(myMap); //расстановка всех маркеров по карте
-
-    var last_click;
+     var last_click;
     $(".points_list").delegate("div", "click", function(){ // Клик по названию Поинта- и выпадает меню с отзывами о покупках
       
       if (last_click != undefined) { //скрывает открытое предыдущее окно 
@@ -182,7 +181,7 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// 
  console.log('сохранение цены и комментария о покупке');
 
  var id_point=$(this).parent().parent().parent().attr("id_point");
- console.log("мой id_point="+id_point);
+ 
          var price=$(this).siblings().find('[name="price"]').val();
          var comment=$(this).siblings('[name="description_point"]').val();
           console.log(price+' comment='+comment);
@@ -220,7 +219,7 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// 
                     note+= "<div class='wrap_note_this'><div class='note_this'>"+data_object[i]['purchase_descr']
                                     
                 + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"+
-                 "</div>" ;}
+                 +"</div>" ;}
                 
                 }// 
        
@@ -240,10 +239,8 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// 
     	$(".add_point").fadeOut();
     	var plasemark;
     	var callback = function (e) {
-        
-        if (typeof plasemark != 'undefined') {
-            console.log(' в этой переменной   маркер');
-           myMap.geoObjects.remove(plasemark);// удаляет маркер
+          if (typeof plasemark != 'undefined') {
+            myMap.geoObjects.remove(plasemark);// удаляет маркер
             }
         
         if (!myMap.balloon.isOpen()) {
@@ -331,7 +328,7 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// 
     });
     });//end add_point (ох, странно эта скобка стоит)
     
-    $(".points_list").delegate("button.no_add_info", "click", function(){
+    $(".points_list").delegate("button.no_add_info", "click", function(){ // скрыть меню о добавлении инфо о цене и наличии
 console.log('должно скрыть');
     $(".wrap_add_comment_into_point").toggle();
     $("button.no_add_info").toggle();
@@ -360,7 +357,7 @@ console.log('должно скрыть');
             console.log("длина массива="+ size);
             var note="";
             note+="<button type='button' class='add_info btn btn-info'>Добавить инфо о цене.</button>";// добавка кнопки добовления комментариев
-            note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'>скрыть это </button>";
+            note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
             note+="<div class='wrap_add_comment_into_point'><div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
         
             // последние 4-е элемента объекта id_point, lan,lng, name - все остальное ЗАМЕТКИ(purchase_descr)-- поэтому вычитаем 5
@@ -371,10 +368,13 @@ console.log('должно скрыть');
                  "</div>" ;
                 
             // описание покупки для  показа в балоне маркера (описание покупки, время, цена)
-             }
+             } 
+             var balloon_last_purchase="<div class='wrap_note_this'><div class='note_this'>"+value[size-5].purchase_descr
+                + "</div><div class='data_note'>"+value[size-5].data_note+"</div><div class='last_price'>"+value[size-5].price+"р.</div>"+
+                 "</div>" ;
              
             myMap.geoObjects.add(new ymaps.Placemark([Number(value.lan), Number(value.lng)], {
-            balloonContent: '<strong>'+ value.name+'</strong><br>'+ note
+            balloonContent: '<strong>'+ value.name+'</strong><br>'+ balloon_last_purchase   //содержимое балуна
         }, {
             preset: 'islands#icon',
             iconColor: '#79c142',// основной цвет маркеров

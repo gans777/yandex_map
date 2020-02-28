@@ -12,7 +12,7 @@ function print_arr($arr){
 }
 include "connect.php";
 
-/* если нет таблиц, то генерирует их*/
+/* если нет таблиц в базе, то генерируются эти*/
 $check= "CREATE TABLE IF NOT EXISTS `note` (
   `id_note` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `purchase_descr` varchar(255) NOT NULL,
