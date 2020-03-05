@@ -1,5 +1,5 @@
 ymaps.ready(init);
-
+//
 function init(){
 
       $( ".products_name" ).change(function() { // по какому товару карту выводить
@@ -104,12 +104,14 @@ function init(){
       
       if (last_click != undefined) { //скрывает открытое предыдущее окно 
         
-       last_click.toggle();//скрывает или показывает выбранные элемент 
+       //last_click.toggle();//скрывает или показывает выбранные элемент 
+       last_click.hide();
        last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
       }
       
       last_click=$(this).children(".wrap_dropdown_info");
       last_click.toggle();
+      //last_click.hide();
       last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
        /*
       if (last_click.children('.add_info').css('display') == 'none') {
@@ -150,7 +152,7 @@ function init(){
       console.log("клик не по открытому окну");
     
      if (last_click != undefined) { //скрывает открытое предыдущее окно 
-      last_click.toggle();// .toggle() скрывает или показывает выбранные элемент 
+      last_click.hide();// .toggle() скрывает или показывает выбранные элемент 
         last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
         // last_click.find(".wrap_add_comment_into_point").css('display','none');
          /*  stop here 10.02
@@ -167,21 +169,25 @@ function init(){
     }
   });
 
+$(".points_list").delegate("button.close_wrap_dropdown_info ", "click", function(){//клик по КРЕСТУ закрытия wrap_dropdown_info
+      console.log("click to cross");
+      $(this).closest(".wrap_dropdown_info").hide();
 
+});
   $(".points_list").delegate("button.add_info", "click", function(){ //клик по кнопке "добавить инфо о цене"
-      var id_point=$(this).parent().parent().attr("id_point");
+      var id_point=$(this).parent().parent().parent().attr("id_point");
 console.log("id_point= "+ id_point);//номер id поинта
-$("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// показвает/скрывает меню добавления комментария
- $("[id_point='"+id_point+"']").find("button.add_info").toggle();// показывает/скрывает кнопку "добавить инфо о цене"
-  $("[id_point='"+id_point+"']").find("button.no_add_info").toggle();
+$("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").show();// показвает форму добавления комментария
+ //$("[id_point='"+id_point+"']").find("button.add_info").toggle();// показывает/скрывает кнопку "добавить инфо о цене"
+  //$("[id_point='"+id_point+"']").find("button.no_add_info").toggle();
  });
 
 
   $(".points_list").delegate("#save_comment_about_product", "click", function(){// сохранение цены и комментария о ПОСЛЕДНЕЙ покупке  в выбранном Поинте
  console.log('сохранение цены и комментария о покупке');
 
- var id_point=$(this).parent().parent().parent().attr("id_point");
- 
+ var id_point=$(this).parent().parent().parent().parent().attr("id_point");
+ console.log("id_point="+ id_point);
          var price=$(this).siblings().find('[name="price"]').val();
          var comment=$(this).siblings('[name="description_point"]').val();
           console.log(price+' comment='+comment);
@@ -202,11 +208,7 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// 
                  var data_object = JSON.parse(data);
                
                
-            var note="";
-            //note+="<button type='button' class='add_info btn btn-info'>Добавить инфо о цене.</button>";// добавка кнопки добовления комментариев(может стоить убрать этот "Добавить инфо о цене.")
-            note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'>скрыть это </button>";
-            note+="<div class='wrap_add_comment_into_point'><div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
-               
+               var note= html_wrap_close_and_addinfo();
                 for (var i=data_object.length-1; i>=0; i--){
                   
                   if (i==data_object.length-1) {
@@ -218,14 +220,14 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// 
                   } else {
                     note+= "<div class='wrap_note_this'><div class='note_this'>"+data_object[i]['purchase_descr']
                                     
-                + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"+
+                + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"
                  +"</div>" ;}
                 
                 }// 
        
               this_target.append(note);    
 
-
+             
            } // 
           
       });
@@ -328,17 +330,25 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").toggle();// 
     });
     });//end add_point (ох, странно эта скобка стоит)
     
-    $(".points_list").delegate("button.no_add_info", "click", function(){ // скрыть меню о добавлении инфо о цене и наличии
-console.log('должно скрыть');
-    $(".wrap_add_comment_into_point").toggle();
-    $("button.no_add_info").toggle();
-    $("button.add_info").toggle();
 
+    $(".points_list").delegate("button.no_add_info", "click", function(){ // скрыть меню о добавлении инфо о цене и наличии--(клик по кресту закрытия) 
+   
+    $(this).closest(".wrap_add_comment_into_point").css("display","none");
      });
         
         }//end init
    
-
+function html_wrap_close_and_addinfo(){
+   var note="";
+            note+="<div class='wrap_close_and_addinfo'>";
+            note+="<button type=\"button\" class=\"close_wrap_dropdown_info btn btn-success mr-1\"><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i></button>";
+            note+="<button type='button' class='add_info btn btn-info' title='записать отзыв о покупке/наличии дефицита'><i class=\"fa fa-cart-plus fa-lg\" aria-hidden=\"true\"></i> наличие</button>";// кнопки добовления комментариев
+            note+="<div class='wrap_add_comment_into_point'>";
+            note+="<button type='button' class='no_add_info btn btn-danger'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
+            note+="<div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
+            note+="</div>";
+  return note;
+}
   function read_markers_all(myMap) {
        $(".points_list").empty();//очистка списка точек
 
@@ -354,12 +364,21 @@ console.log('должно скрыть');
              var count=1;
             all_markers.forEach(function(value){
               var size = Object.keys(value).length;
-            console.log("длина массива="+ size);
-            var note="";
+            //console.log("длина массива="+ size);
+            
+            /*
+             note+="<div class='wrap_close_and_addinfo'>";
+            note+="<button type=\"button\" class=\"btn btn-success\"><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i></button>";
             note+="<button type='button' class='add_info btn btn-info'>Добавить инфо о цене.</button>";// добавка кнопки добовления комментариев
-            note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
-            note+="<div class='wrap_add_comment_into_point'><div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
-        
+           // note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
+            
+            note+="<div class='wrap_add_comment_into_point'>";
+            note+="<button type='button' class='no_add_info btn btn-danger'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
+            note+="<div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
+            note+="</div>";  //end wrap_close_and_addinfo
+            */
+           var note=html_wrap_close_and_addinfo();
+
             // последние 4-е элемента объекта id_point, lan,lng, name - все остальное ЗАМЕТКИ(purchase_descr)-- поэтому вычитаем 5
              for(var  i=(size-5);i >= 0;i--){
             

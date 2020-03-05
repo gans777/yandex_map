@@ -45,9 +45,7 @@ body {
 	padding: 3px;
 	background-color:#bada55;
 }
-.no_add_info {
-	text-align: right;
-}
+
 .data_note {
 	font-size: 10px;
 	  display: flex;
@@ -72,12 +70,18 @@ body {
 	margin-bottom: 25px;
 	margin-top: 5px;
 }
+.wrap_close_and_addinfo{
+	display:flex;
+	padding: 3px;
+	
+}
 .wrap_add_comment_into_point {
 	display: none;
 	position: absolute;
 	z-index: 1;
-	background: rgb(73%, 85%, 33%, 0.9);
+	background: #bad954;/*цвет фона меню добовления отзыва rgb(73%, 85%, 33%, 0.9)*/
 	padding: 7px;
+	top:0;
 }
 .one_point {
 	border: 1px solid green;
