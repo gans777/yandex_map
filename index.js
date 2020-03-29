@@ -15,7 +15,8 @@ function init(){
             zoom: 12
         }, {
             searchControlProvider: 'yandex#search',
-            'hasBalloon': true
+            'hasBalloon': true,
+            balloonPanelMaxMapArea: Infinity
         });
 
     // Сравним положение, вычисленное по ip пользователя и
@@ -81,51 +82,76 @@ function init(){
         myMap.geoObjects.add(result.geoObjects);
     });
 */
-        var balloon = null;//странно- больше нигде не встречается
-
-          read_markers_all(myMap); //расстановка всех маркеров по карте
+           read_markers_all(myMap); //расстановка всех маркеров по карте
 
     myMap.geoObjects.events.add('click', function (e) { // при клике по маркеру выпадает меню покупок дефицита
     
     // Получение ссылки на дочерний объект, на котором произошло событие.
     var object = e.get('target');
     var lan=e.get('target').geometry.getCoordinates()[0];
-    var lng = e.get('target').geometry.getCoordinates()[1];
+        var lng = e.get('target').geometry.getCoordinates()[1];
 
-    /*
-    $(".info_point_on").removeClass("info_point_on");
-    $('[lan="'+lan+'"][lng="'+lng+'"]').addClass("info_point_on");
-     */
+ if (opening_window_point != undefined) 
+        { 
+            $('[id_point="'+opening_window_point+'"]').find(".wrap_dropdown_info").removeAttr("style");
+             $('[id_point="'+opening_window_point+'"]').removeClass("toggle_name_point_dropdown_on");
+              
+       }
+    
+   
+    $('[lan="'+lan+'"][lng="'+lng+'"]').children(".wrap_dropdown_info").css("display","block");
+     $('[lan="'+lan+'"][lng="'+lng+'"]').addClass("toggle_name_point_dropdown_on");
+       opening_window_point =  $('[lan="'+lan+'"][lng="'+lng+'"]').attr("id_point");
+         var id_point=opening_window_point;
+
+          myMap.geoObjects.each(function(geoObject){// этот кусок надо в функцию оформить
+                              
+                          if (geoObject.options.get('last_center')==1){
+                               geoObject.options.set({'last_center':0});
+                                geoObject.options.set({'iconColor': '#79c142'});// восстановление цвета маркера на прежний
+                          }
+                           if (id_point==geoObject.options.get('id_point')) {
+                              geoObject.options.set({'iconColor': '#bada55'});//цвет маркера в центре карты
+                               geoObject.options.set({'last_center':1});
+                           }
+          
+        });
   
    });
       
-     var last_click;
-    $(".points_list").delegate("div", "click", function(){ // Клик по названию Поинта- и выпадает меню с отзывами о покупках
-      
+     var opening_window_point; //глобальная переменная для запоминания последнего открытого меню поинта
+    $(".points_list").delegate("div", "click", function(e){ // Клик по названию Поинта- и выпадает меню с отзывами о покупках
+     myMap.balloon.close();//закрывает все открытые балууны на карте- если они есть
+        //e.stopPropagation();// запрещает дальнейщую передачу события(и проблемы с исчезновением карты добавляет!!!)
+/*
       if (last_click != undefined) { //скрывает открытое предыдущее окно 
-        
+        console.log("click to .point_list="+e.target);
        //last_click.toggle();//скрывает или показывает выбранные элемент 
+       // где-то здесь проблема
        last_click.hide();
        last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
       }
-      
-      last_click=$(this).children(".wrap_dropdown_info");
-      last_click.toggle();
-      //last_click.hide();
-      last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
-       /*
-      if (last_click.children('.add_info').css('display') == 'none') {
-        last_click.children('.add_info').toggle();
-        last_click.children('.no_add_info').toggle();
-        last_click.find('.wrap_add_comment_into_point').toggle();
-      }
-        */
-            
-     // myMap.setCenter([45.0701, 37.0048]);
+      */
+      // определить открыте id точки и открыто ли окно - 
+      console.log("event.target="+e.target.tagName);
+      if (e.target.tagName != 'DIV' ) { return;}
+      var id_point= $(this).attr('id_point');
+       if (opening_window_point != undefined) 
+        { 
+            $('[id_point="'+opening_window_point+'"]').find(".wrap_dropdown_info").removeAttr("style");
+             $('[id_point="'+opening_window_point+'"]').removeClass("toggle_name_point_dropdown_on");
+              
+       }
+           opening_window_point=id_point;
+     var last_click=$(this).children(".wrap_dropdown_info");
+       
+      last_click.css("display","block");//появление меню
+      last_click.closest(".info_point").addClass("toggle_name_point_dropdown_on");
+                
      var lan=Number($(this).attr('lan')); var lng=Number($(this).attr('lng'));//Данный Поинт оказывается в центре карты 
        myMap.setCenter([lan,lng]);
 
-        var id_point= $(this).attr('id_point');
+        
        //here need to change color of marker
         //console.log('zx= '+Object.keys(myMap.geoObjects));
         myMap.geoObjects.each(function(geoObject){
@@ -146,32 +172,27 @@ function init(){
     });
 
 
-      $(document).on('click', function(e){ // убирает выпадающее меню при клике МИМО МЕНЮ
-    if (!(($(e.target).parents('.wrap_dropdown_info').length) || ($(e.target).hasClass('wrap_dropdown_info')) || ($(e.target).hasClass('toggle_name_point_dropdown_on'))
-     || $(e.target).hasClass('point_price')|| $(e.target).hasClass('this_close_free_click') )) {
-      console.log("клик не по открытому окну");
-    
-     if (last_click != undefined) { //скрывает открытое предыдущее окно 
-      last_click.hide();// .toggle() скрывает или показывает выбранные элемент 
-        last_click.closest(".info_point").toggleClass("toggle_name_point_dropdown_on");
-        // last_click.find(".wrap_add_comment_into_point").css('display','none');
-         /*  stop here 10.02
-         
-         if (last_click.find(".add_info").css('display') =='none') { 
-           last_click.find(".no_add_info").css('display','none');
-            last_click.find(".add_info").attr('style', '');
-           }
-          */ 
-         
-         last_click = undefined;
-      }
-    
-    }
-  });
-
 $(".points_list").delegate("button.close_wrap_dropdown_info ", "click", function(){//клик по КРЕСТУ закрытия wrap_dropdown_info
       console.log("click to cross");
-      $(this).closest(".wrap_dropdown_info").hide();
+        opening_window_point=undefined;
+      $(this).closest(".wrap_dropdown_info").removeAttr("style");
+       $(this).closest(".info_point").removeClass("toggle_name_point_dropdown_on");
+         myMap.geoObjects.each(function(geoObject){
+                              
+                          if (geoObject.options.get('last_center')==1){
+                               geoObject.options.set({'last_center':0});
+                                geoObject.options.set({'iconColor': '#79c142'});// восстановление цвета маркера на прежний
+                          }
+                          /*
+                           if (id_point==geoObject.options.get('id_point')) {
+                              geoObject.options.set({'iconColor': '#bada55'});//цвет маркера в центре карты
+                               geoObject.options.set({'last_center':1});
+                           }
+                           */
+          
+        });
+
+    
 
 });
   $(".points_list").delegate("button.add_info", "click", function(){ //клик по кнопке "добавить инфо о цене"
