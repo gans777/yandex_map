@@ -233,16 +233,15 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").show();// п
                 for (var i=data_object.length-1; i>=0; i--){
                   
                   if (i==data_object.length-1) {
-                    note+= "<div class='wrap_note_this bg-success' ><div class='note_this'>"+data_object[i]['purchase_descr']
-                  
-                + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"+
-                 "</div>" ;
-                 $("[id_point='"+id_point+"']").find(".point_price").html(data_object[i]['params_value']+"р.");
+                    note+= "<div class='wrap_note_this bg-success' ><div class='note_this'>"+data_object[i]['purchase_descr']                  
+                + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"
+                +"<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div> "+"</div>" ;
+                 $("[id_point='"+id_point+"']").find(".point_price").html(data_object[i]['params_value']+"р.");//выводит на главную панель меню последнюю стоимость
                   } else {
                     note+= "<div class='wrap_note_this'><div class='note_this'>"+data_object[i]['purchase_descr']
                                     
                 + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"
-                 +"</div>" ;}
+                 +"<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div>"+"</div>" ;}
                 
                 }// 
        
@@ -254,6 +253,9 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").show();// п
       });
 
   });
+$(".points_list").delegate(".delete_this_note", "click", function(){// удаление записи
+  console.log('клик по корзине');// stop here 04.04
+});
 
 // добавление новой точки в текущем товаре
     $(".add_point").click(function(){
@@ -405,7 +407,7 @@ function html_wrap_close_and_addinfo(){
             
                 note+= "<div class='wrap_note_this'><div class='note_this'>"+value[i].purchase_descr
                 + "</div><div class='data_note'>"+value[i].data_note+"</div><div class='last_price'>"+value[i].price+"р.</div>"+
-                 "</div>" ;
+                 "<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div>"+"</div>" ;
                 
             // описание покупки для  показа в балоне маркера (описание покупки, время, цена)
              } 
