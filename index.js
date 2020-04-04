@@ -233,15 +233,22 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").show();// п
                 for (var i=data_object.length-1; i>=0; i--){
                   
                   if (i==data_object.length-1) {
-                    note+= "<div class='wrap_note_this bg-success' ><div class='note_this'>"+data_object[i]['purchase_descr']                  
+                    note+=html_wrap_note_this(data_object[i],'bg-success');
+                    /*
+                    note+= "<div class='wrap_note_this bg-success' data-id_note='"+data_object[i]['id_note']+"'><div class='note_this'>"+data_object[i]['purchase_descr']                  
                 + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"
                 +"<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div> "+"</div>" ;
+                    */
                  $("[id_point='"+id_point+"']").find(".point_price").html(data_object[i]['params_value']+"р.");//выводит на главную панель меню последнюю стоимость
                   } else {
-                    note+= "<div class='wrap_note_this'><div class='note_this'>"+data_object[i]['purchase_descr']
+                    note+=html_wrap_note_this(data_object[i]);
+                    /*
+                    note+= "<div class='wrap_note_this' data-id_note='"+data_object[i]['id_note']+"'><div class='note_this'>"+data_object[i]['purchase_descr']
                                     
                 + "</div><div class='data_note'>"+data_object[i]['data_note']+"</div><div class='last_price'>"+data_object[i]['params_value']+"р.</div>"
-                 +"<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div>"+"</div>" ;}
+                 +"<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div>"+"</div>" ;
+                  */
+                 }
                 
                 }// 
        
@@ -372,6 +379,12 @@ function html_wrap_close_and_addinfo(){
             note+="</div>";
   return note;
 }
+function html_wrap_note_this(value,last_add_purchase_descr='') {
+  var note =  "<div class='wrap_note_this "+ last_add_purchase_descr +"' data-id_note='"+value['id_note']+"'><div class='note_this'>"+value['purchase_descr']
+                + "</div><div class='data_note'>"+value['data_note']+"</div><div class='last_price'>"+value['params_value']+"р.</div>"+
+                 "<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div>"+"</div>" ;
+  return note;
+}
   function read_markers_all(myMap) {
        $(".points_list").empty();//очистка списка точек
 
@@ -387,33 +400,22 @@ function html_wrap_close_and_addinfo(){
              var count=1;
             all_markers.forEach(function(value){
               var size = Object.keys(value).length;
-            //console.log("длина массива="+ size);
-            
-            /*
-             note+="<div class='wrap_close_and_addinfo'>";
-            note+="<button type=\"button\" class=\"btn btn-success\"><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i></button>";
-            note+="<button type='button' class='add_info btn btn-info'>Добавить инфо о цене.</button>";// добавка кнопки добовления комментариев
-           // note+="<button type='button' class='no_add_info btn btn-danger' style='display: none;'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
-            
-            note+="<div class='wrap_add_comment_into_point'>";
-            note+="<button type='button' class='no_add_info btn btn-danger'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
-            note+="<div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
-            note+="</div>";  //end wrap_close_and_addinfo
-            */
+        
            var note=html_wrap_close_and_addinfo();
 
             // последние 4-е элемента объекта id_point, lan,lng, name - все остальное ЗАМЕТКИ(purchase_descr)-- поэтому вычитаем 5
              for(var  i=(size-5);i >= 0;i--){
-            
-                note+= "<div class='wrap_note_this'><div class='note_this'>"+value[i].purchase_descr
-                + "</div><div class='data_note'>"+value[i].data_note+"</div><div class='last_price'>"+value[i].price+"р.</div>"+
+                note+= html_wrap_note_this(value[i]);
+                /*
+                note+= "<div class='wrap_note_this' data-id_note='"+value[i]['id_note']+"'><div class='note_this'>"+value[i]['purchase_descr']
+                + "</div><div class='data_note'>"+value[i]['data_note']+"</div><div class='last_price'>"+value[i]['price']+"р.</div>"+
                  "<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div>"+"</div>" ;
-                
+                */
             // описание покупки для  показа в балоне маркера (описание покупки, время, цена)
              } 
-             var balloon_last_purchase="<div class='wrap_note_this'><div class='note_this'>"+value[size-5].purchase_descr
-                + "</div><div class='data_note'>"+value[size-5].data_note+"</div><div class='last_price'>"+value[size-5].price+"р.</div>"+
-                 "</div>" ;
+             var balloon_last_purchase="<div class='wrap_note_this' data-id_note='"+value[size-5]['id_note']+"'><div class='note_this'>"+value[size-5].purchase_descr
+                + "</div><div class='data_note'>"+value[size-5].data_note+"</div><div class='last_price'>"+value[size-5].params_value+"р.</div>"+
+                 "</div>" ;// здесь может лучше еще маленькое фото поинта добавить 
              
             myMap.geoObjects.add(new ymaps.Placemark([Number(value.lan), Number(value.lng)], {
             balloonContent: '<strong>'+ value.name+'</strong><br>'+ balloon_last_purchase   //содержимое балуна
@@ -425,7 +427,7 @@ function html_wrap_close_and_addinfo(){
             
               
             $('.points_list').append('<div class="info_point" lan='+value.lan +' lng='+ value.lng +' id_point='+value.id_point+'><span>'+count+'.</span>'+value.name+
-              '<span class="point_price" alt="последняя цена">'+value[size-5].price+'р.</span><div class="wrap_dropdown_info">'+note+'</div></div>');
+              '<span class="point_price" alt="последняя цена">'+value[size-5].params_value+'р.</span><div class="wrap_dropdown_info">'+note+'</div></div>');
             count++;
             });
             

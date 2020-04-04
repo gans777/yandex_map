@@ -148,7 +148,8 @@ $sql = "SELECT id_point,lan,lng,name FROM points WHERE product='".$product."'";
              $sql = "SELECT params_value FROM products_parametrs WHERE id_note=".$all_this_note[$i]['id_note'];
            $res = mysqli_query($link,$sql);
            $this_note_price=MysqliFetchAll($res);
-           $all_this_note[$i]['price']= $this_note_price[0]['params_value'];
+           //$all_this_note[$i]['price']= $this_note_price[0]['params_value'];
+            $all_this_note[$i]['params_value']= $this_note_price[0]['params_value'];
             array_push($all_points[$j],$all_this_note[$i]);
           }
          
