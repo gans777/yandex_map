@@ -260,9 +260,77 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").show();// п
       });
 
   });
-$(".points_list").delegate(".delete_this_note", "click", function(){// удаление записи
-  console.log('клик по корзине');// stop here 04.04
-});
+
+$(".points_list").delegate(".delete_this_note", "click", function(){// удаление заметки  (если заметка последняя, то и Поинт удаляется)
+  var id_note= $(this).closest(".wrap_note_this").attr('data-id_note');
+
+  console.log('клик по корзине='+id_note);
+   //проверка не последняя ли это запись в этом ПОИНТЕ, если последняя- то удалить потом весь поинт
+    var id_point=$(this).closest(".info_point ").attr('id_point');
+     console.log("id_point этой записи="+id_point); //stop here 1304
+       var how_many_wrap_note_this = $("[id_point='"+id_point+"']").find(".wrap_note_this").length;
+         console.log("количество .wrap_note_this="+how_many_wrap_note_this);
+   //
+   $('.delete_wrap_note_this').empty();
+   var html_string = $(this).closest(".wrap_note_this").html();
+    $('.delete_wrap_note_this').append("<div class='wrap_note_this'>"+html_string+"</div>");
+     $('.delete_wrap_note_this').find('.delete_this_note').remove();
+      $('#delete_note').modal();//появление окна  подтверждения удаления
+        
+        $('.delete_note_on').click(function(){
+          $.ajax({
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'delete_purchase_descr_sql',
+              'id_note': id_note
+      },
+           success: function(data){
+                console.log(data);//stop here 0504 (теперь обновить меню ПОИНТА)
+                $('#delete_note').modal('hide');//это бутсраповское модальное окно
+                var this_wrap_dropdown_info=$("[data-id_note='"+id_note+"']").closest(".info_point");
+                $("[data-id_note='"+id_note+"']").remove();
+                var last_price = this_wrap_dropdown_info.find('.last_price:eq(0)').text();//определяет цену из последнего отзыва
+                 this_wrap_dropdown_info.find(".point_price").html(last_price);// вставляет цену из последнего отзыва в титульную панель
+                  
+                  if (how_many_wrap_note_this==1) {
+                    console.log('тут последний коммент id_point='+ id_point);
+                    $.ajax({
+                      type:'post',
+                      url:'ajax/ajaxrequest.php',
+                      data:{'label':'delete_empty_point',
+                            'id_point':id_point
+                      },
+                          success: function(data){
+                            console.log(data);
+                            $("[id_point='"+id_point+"']").remove();
+
+                                 myMap.geoObjects.each(function(geoObject){
+                              
+                          if (geoObject.options.get('last_center')==1){
+                               //geoObject.options.set({'last_center':0});
+                               // geoObject.options.set({'iconColor': '#79c142'});// восстановление цвета маркера на прежний
+                                //geoObject.options.remove();
+                                myMap.geoObjects.remove(geoObject);
+                          }
+                          /*
+                           if (id_point==geoObject.options.get('id_point')) {
+                              geoObject.options.set({'iconColor': '#bada55'});//цвет маркера в центре карты
+                               geoObject.options.set({'last_center':1});
+                           }
+                           */
+          
+        });
+                          }
+                    });
+                  }
+                  
+           }
+         }); //end ajax       
+        });
+
+   
+
+});//end удаление записи
 
 // добавление новой точки в текущем товаре
     $(".add_point").click(function(){

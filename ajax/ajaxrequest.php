@@ -160,5 +160,41 @@ $sql = "SELECT id_point,lan,lng,name FROM points WHERE product='".$product."'";
   
 }
 
+if ($_POST['label']=='delete_purchase_descr_sql') {
+  $id_note=$_POST['id_note'];
+   $sql="DELETE FROM note WHERE id_note=$id_note";
+    if (mysqli_query($link, $sql)) {
+    echo "Record deleted successfully from NOTE.";
+} else {
+    echo "Error deleting record: note " . mysqli_error($link);
+}
+    $sql="DELETE FROM products_parametrs WHERE id_note=$id_note";
+      if (mysqli_query($link, $sql)) {
+    echo "Record deleted successfully from products_parametrs.";
+} else {
+    echo "Error deleting record: products_parametrs " . mysqli_error($link);
+}
+ 
+}
 
+if($_POST['label']=='delete_empty_point'){
+  
+  $id_point=$_POST['id_point'];
+  
+   $sql="SELECT id_point FROM note WHERE id_point=".$id_point;
+    $res = mysqli_query($link,$sql);
+     $all_this_note= MysqliFetchAll($res);
+     
+       $sql="DELETE FROM points WHERE id_point=$id_point";
+          if (mysqli_query($link, $sql)) {
+            echo "Record deleted successfully from POINTS.";
+              } else {
+           echo "Error deleting record: points " . mysqli_error($link);
+}  
+  echo "содержание all_this_note=".$all_this_note;
+      
+
+      
+
+}
 ?>
