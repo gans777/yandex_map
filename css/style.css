@@ -5,6 +5,11 @@ body {
 .wrap_map {
 	position:relative;
 }
+.wrap_header{
+	display:flex;
+	justify-content: space-around;
+	align-items: center;
+}
 .points_list {
 	display: flex;
 	flex-wrap: wrap;

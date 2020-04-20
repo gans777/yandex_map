@@ -14,7 +14,7 @@
 	<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 
 	<div class="container">
-
+        <div class="wrap_header">
 		<div class="wrap_products_name">
 		<div class="products_name">товар:
 			<?php
@@ -32,6 +32,10 @@
 			 ?>
 		
         </div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-lg add_new_deficit"><i class="fa fa-plus" aria-hidden="true"></i>
+        <i class="fa fa-sitemap" aria-hidden="true"></i> новый дефицит
+</button>
         </div>
 <div class="wrap_map">
 	<div id="map" style="width: 90%; height: 300px">
@@ -53,7 +57,7 @@
          </div>
 </div>
 	<div class="wrap_coord_point" style="display: none;">
-		
+			
 		<div>широта: <input type="text" name="lan"> долгота:<input type="text" name="lng"></div>
           
           
@@ -65,7 +69,7 @@
 		<button type="button" class="btn btn-primary save">сохранить</button>
 	</div>
 	</div>
-	<!--html для модального окна-->
+	<!--html для модального окна для удаления note-->
 	<div class="modal fade" id="delete_note" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered-sm" role="document">
     <div class="modal-content">
@@ -86,6 +90,34 @@
   </div>
 </div>
 <!-- end html для модального окна --> 
+<!-- Modal для создания новой категории/ДЕФИЦИТА -->
+<div class="modal fade" id="add_new_deficit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">создание категории дефицита</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">название товара</label>
+    <input type="text" class="form-control" id="input_name_deficit" aria-describedby="emailHelp">
+    <small id="emailHelp" class="form-text text-muted">введите название наблюдаемого товара.</small>
+  </div>
+    
+</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary save_new_deficit">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end.Modal для создания новой категории/ДЕФИЦИТА -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js">
  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

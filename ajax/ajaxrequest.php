@@ -3,42 +3,11 @@ include '../functions/functions.php';
 
 include "../functions/connect.php";
 
-/* если нет таблиц в базе, то генерируются эти*/
-$check= "CREATE TABLE IF NOT EXISTS `note` (
-  `id_note` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `purchase_descr` varchar(255) NOT NULL,
-  `id_point` int(11) NOT NULL,
-  `data_note` timestamp NULL DEFAULT current_timestamp(),
-    UNIQUE (`id_note`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;"; 
-$res = mysqli_query($link, $check);
-
-$check= "CREATE TABLE IF NOT EXISTS  `points` (
-  `id_point` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `lan` varchar(20) NOT NULL,
-  `lng` varchar(20) NOT NULL,
-  `name` varchar(20) NOT NULL,
-  `product` varchar(20) NOT NULL,
-  `category` varchar(20) NOT NULL,
-  UNIQUE (`id_point`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-";
-$res = mysqli_query($link, $check);
-
-$check= "CREATE TABLE IF NOT EXISTS  `products_parametrs` (
-  `name_of_param` varchar(20) NOT NULL,
-  `product` varchar(20) NOT NULL,
-  `params_value` varchar(20) NOT NULL,
-  `id_note` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-$res = mysqli_query($link, $check);
-/*end = если нет таблиц, то генерирует их*/
-
-if ($_POST['label']=='list_of_products'){ // это список деф товаров- пока не нужен---потом возможно удалить
-  $sql = "SELECT name_of_product FROM deficit_products";
-  $res = mysqli_query($link,$sql);
-  $all_products = MysqliFetchAll($res);
-  print_arr($all_products);
+if ($_POST['label']=='add_new_deficit'){ // 
+  
+  $insert = "INSERT INTO `deficit_products` (name_of_product) VALUES ('".$_POST['name_of_deficit']."')";
+  $res = mysqli_query($link,$insert);
+  
 }
 
 if ($_POST['label']=='save_new_marker') {

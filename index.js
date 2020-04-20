@@ -1,15 +1,28 @@
 $(document).ready(function(){
-  $.ajax({
+  $(".add_new_deficit").click(function(){
+    $("#add_new_deficit").modal('show');
+  });
+
+  $(".save_new_deficit").click(function(){
+    var name_of_deficit=$("#input_name_deficit").val();
+     if (name_of_deficit.length-1 < 2) { $("#emailHelp").html("<span style=\"color: red;\">слишком короткое наименование</span>");
+  return;
+   }
+     //тут можно проверок поставить
+     $.ajax({
         type:'post',
         url:'ajax/ajaxrequest.php',
-        data:{'label':'list_of_products'
+        data:{'label':'add_new_deficit',
+              'name_of_deficit': name_of_deficit
               
       },
-           success: function(data){ 
-           console.log(data);
-           }// вместо этого на yf php что ли сделать
-         });
-});//end.
+           success: function(data){
+             console.log(data); 
+             $("#add_new_deficit").modal('hide');//stop here2104
+                      }
+                    });//end ajax
+  });
+});//end.ready
 
 ymaps.ready(init);
 //
@@ -21,6 +34,7 @@ function init(){
        
          read_markers_all(myMap);
   });
+
         // Создание карты.  
          var geolocation = ymaps.geolocation,
         myMap = new ymaps.Map('map', {
