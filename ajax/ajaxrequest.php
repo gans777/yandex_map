@@ -1,16 +1,7 @@
 <?php 
-function MysqliFetchAll($res){
-             $result=array();
-             while ($row = mysqli_fetch_assoc($res)) {
-              $result[]=$row;
-     }
-               return $result;
- }
+include '../functions/functions.php';
 
-function print_arr($arr){
-	echo "<pre>".print_r($arr,true)."</pre>";
-}
-include "connect.php";
+include "../functions/connect.php";
 
 /* если нет таблиц в базе, то генерируются эти*/
 $check= "CREATE TABLE IF NOT EXISTS `note` (
@@ -43,7 +34,7 @@ $check= "CREATE TABLE IF NOT EXISTS  `products_parametrs` (
 $res = mysqli_query($link, $check);
 /*end = если нет таблиц, то генерирует их*/
 
-if ($_POST['label']=='list_of_products'){
+if ($_POST['label']=='list_of_products'){ // это список деф товаров- пока не нужен---потом возможно удалить
   $sql = "SELECT name_of_product FROM deficit_products";
   $res = mysqli_query($link,$sql);
   $all_products = MysqliFetchAll($res);

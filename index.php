@@ -17,11 +17,20 @@
 
 		<div class="wrap_products_name">
 		<div class="products_name">товар:
-			<select>
-  <option>тофф++</option>
-  <option>нейротин</option>
-  <option>габапентин</option>
-            </select>
+			<?php
+               include 'functions/connect.php';
+               include 'functions/functions.php';
+               include 'functions/create_tables.php';// это проверить!!!!!!
+               $sql = "SELECT name_of_product FROM deficit_products";
+               $res = mysqli_query($link,$sql);
+               $all_products = MysqliFetchAll($res);
+               echo "<select>";
+                foreach ($all_products as  $value) {
+                	echo "<option>".$value['name_of_product']."</option>".PHP_EOL;
+                }
+                echo "</select>";
+			 ?>
+		
         </div>
         </div>
 <div class="wrap_map">

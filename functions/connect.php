@@ -1,10 +1,9 @@
-<?php 
-  function print_arr($arr){
-	echo "<pre>".print_r($arr,true)."</pre>";
-}
+<?php
 
 
-$link = @mysqli_connect("127.0.0.1", "def", "zx15619", "deficit");
+$link = @mysqli_connect("127.0.0.1", "root", "", "deficit");
+
+//$link = @mysqli_connect("127.0.0.1", "gans", "Palkdmrywt82xcDEjc", "gans");
 
 if (!$link) {
     echo "Ошибка: Невозможно установить соединение с MySQL." . PHP_EOL;
@@ -13,5 +12,7 @@ if (!$link) {
     exit;
 }
 mysqli_set_charset($link, "utf8");
-echo "Соединение с MySQL установлено! - готов к записи" . PHP_EOL;
+//echo "Соединение с MySQL установлено! - готов к записи" . PHP_EOL;
+
+ 
 ?>
