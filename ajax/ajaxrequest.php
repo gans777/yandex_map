@@ -43,6 +43,12 @@ $check= "CREATE TABLE IF NOT EXISTS  `products_parametrs` (
 $res = mysqli_query($link, $check);
 /*end = если нет таблиц, то генерирует их*/
 
+if ($_POST['label']=='list_of_products'){
+  $sql = "SELECT name_of_product FROM deficit_products";
+  $res = mysqli_query($link,$sql);
+  $all_products = MysqliFetchAll($res);
+  print_arr($all_products);
+}
 
 if ($_POST['label']=='save_new_marker') {
 	$name_point=$_POST['name_point'];
@@ -180,21 +186,17 @@ if ($_POST['label']=='delete_purchase_descr_sql') {
 if($_POST['label']=='delete_empty_point'){
   
   $id_point=$_POST['id_point'];
-  
+  /* может стоит удостовериться , что в note нет записей этого Поинта
    $sql="SELECT id_point FROM note WHERE id_point=".$id_point;
     $res = mysqli_query($link,$sql);
      $all_this_note= MysqliFetchAll($res);
-     
+     */
        $sql="DELETE FROM points WHERE id_point=$id_point";
           if (mysqli_query($link, $sql)) {
             echo "Record deleted successfully from POINTS.";
               } else {
            echo "Error deleting record: points " . mysqli_error($link);
 }  
-  echo "содержание all_this_note=".$all_this_note;
-      
-
-      
-
-}
+  
+ }
 ?>

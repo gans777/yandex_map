@@ -1,3 +1,16 @@
+$(document).ready(function(){
+  $.ajax({
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'list_of_products'
+              
+      },
+           success: function(data){ 
+           console.log(data);
+           }// вместо этого на yf php что ли сделать
+         });
+});//end.
+
 ymaps.ready(init);
 //
 function init(){
