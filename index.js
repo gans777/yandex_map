@@ -8,7 +8,7 @@ $(document).ready(function(){
      if (name_of_deficit.length-1 < 2) { $("#emailHelp").html("<span style=\"color: red;\">слишком короткое наименование</span>");
   return;
    }
-     //тут можно проверок поставить
+     //тут можно проверок поставить на правильное заполнение формы
      $.ajax({
         type:'post',
         url:'ajax/ajaxrequest.php',
@@ -305,11 +305,14 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
       $('#delete_note').modal();//появление окна  подтверждения удаления
         
         $('.delete_note_on').click(function(){
+          
+           
           $.ajax({
         type:'post',
         url:'ajax/ajaxrequest.php',
         data:{'label':'delete_purchase_descr_sql',
               'id_note': id_note
+              
       },
            success: function(data){
                 console.log(data);//stop here 0504 (теперь обновить меню ПОИНТА)
@@ -339,16 +342,36 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
                                 //geoObject.options.remove();
                                 myMap.geoObjects.remove(geoObject);
                           }
-                          /*
-                           if (id_point==geoObject.options.get('id_point')) {
-                              geoObject.options.set({'iconColor': '#bada55'});//цвет маркера в центре карты
-                               geoObject.options.set({'last_center':1});
-                           }
-                           */
+                           
           
         });
-                          }
-                    });
+                                 if ($(".points_list").is(':empty')) { 
+                                   console.log(".point_list ПУСТОЙ");
+                                    var product_name=$('.products_name select>option:selected').text();
+                                     $("#title_deleting_deficit").text('удалить "'+product_name+'"');
+                                     $(".text-wrap").text(product_name);
+                                     $("#delete_empty_deficit").modal('show');
+
+                                      $(".delete_empty_deficit").click(function(){
+                                         console.log('click to deleting category');
+                                                   $.ajax({
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'delete_empty_deficit',
+              'product_name': product_name
+              
+      },
+           success: function(data){
+          $("#delete_empty_deficit").modal('hide');
+          console.log(data);
+          location.reload();
+           }
+         });//end.ajax
+                                      });//end.delete_empty_deficit click
+                                   
+                               }//end.if
+                          }//end.success delete_empty_point
+                    });//end.ajax.delete_empty_point
                   }
                   
            }

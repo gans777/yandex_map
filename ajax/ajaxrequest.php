@@ -159,4 +159,20 @@ if($_POST['label']=='delete_empty_point'){
 }  
   
  }
+  if($_POST['label']=='delete_empty_deficit'){
+     $product_name=$_POST['product_name'];
+        $sql = "SELECT product FROM points WHERE product='".$product_name."'";
+     $res = mysqli_query($link,$sql);
+          $all_concurrence = MysqliFetchAll($res);
+         // print_arr($all_concurrence);
+          if (count($all_concurrence)==0) {
+            $sql="DELETE FROM deficit_products WHERE name_of_product='".$product_name."'";
+            if (mysqli_query($link, $sql)) {
+    echo "Record deleted successfully from deficit_products.";
+} else {
+    echo "Error deleting record: deficit_products " . mysqli_error($link);
+}
+          }
+  }
+
 ?>
