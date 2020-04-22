@@ -3,14 +3,14 @@ include '../functions/functions.php';
 
 include "../functions/connect.php";
 
-if ($_POST['label']=='add_new_deficit'){ // 
+if ($_POST['label']=='add_new_deficit'){ 
   
   $insert = "INSERT INTO `deficit_products` (name_of_product) VALUES ('".$_POST['name_of_deficit']."')";
   $res = mysqli_query($link,$insert);
   
 }
 
-if ($_POST['label']=='save_new_marker') {
+if ($_POST['label']=='save_new_marker') { // это old -- надо будет удалить
 	$name_point=$_POST['name_point'];
     $description_point=$_POST['description_point'];
     $lan=$_POST['lan'];
@@ -33,47 +33,47 @@ if ($_POST['label']=='save_new_marker_sql') {
     $product_price=$_POST['product_price'];
     // подключение к mysql
 echo "пытаюсь записать $name_point || $lan ||$lng||$product||$category";
-  $insert = "INSERT INTO `points` (lan, lng, name, product, category) VALUES ('".$lan."','".$lng."','".$name_point."','".$product."', '".$category."')";
+  $insert = "INSERT INTO `deficit_points` (lan, lng, name, product, category) VALUES ('".$lan."','".$lng."','".$name_point."','".$product."', '".$category."')";
 
 
    $res = mysqli_query($link, $insert);
    if ($res) {echo " успешно записано в таблицу ТОЧКИ";} else {echo " не записано в таблицу ТОЧКИ error";}
 
-     $sql = "SELECT MAX(id_point) FROM points";
+     $sql = "SELECT MAX(id_point) FROM deficit_points";
      $res = mysqli_query($link,$sql);
      $last_id = mysqli_fetch_assoc($res);
       
 
 
-   $insert = "INSERT INTO `note` (id_point,	purchase_descr) VALUES ('".$last_id['MAX(id_point)']."', '".$comment."')";
+   $insert = "INSERT INTO `deficit_note` (id_point,	purchase_descr) VALUES ('".$last_id['MAX(id_point)']."', '".$comment."')";
        $res = mysqli_query($link, $insert);
      if ($res) {echo "заметка успешно записана ";} else {echo " ЗАМЕТКА (NOTE) error";}
     // узнаем id_note
-      $sql = "SELECT MAX(id_note) FROM note";
+      $sql = "SELECT MAX(id_note) FROM deficit_note";
          $res = mysqli_query($link,$sql);
 ////           $last_note_id = mysqli_fetch_all($res); 
            $last_note_id = mysqli_fetch_assoc($res); 
-                   //последний id в таблице note
-                   echo "последний id в таблице note(last_note_id['MAX(id_note)'])=".$last_note_id['MAX(id_note)'].";"; 
+                   //последний id в таблице deficit_note
+                   echo "последний id в таблице deficit_note(last_note_id['MAX(id_note)'])=".$last_note_id['MAX(id_note)'].";"; 
                    print_arr($last_note_id);
 
-                $insert = "INSERT INTO `products_parametrs` (name_of_param,	product, params_value, id_note) VALUES ('цена', '".$product."','".$product_price."','".$last_note_id['MAX(id_note)']."')";
+                $insert = "INSERT INTO `deficit_products_parametrs` (name_of_param,	product, params_value, id_note) VALUES ('цена', '".$product."','".$product_price."','".$last_note_id['MAX(id_note)']."')";
                    $res = mysqli_query($link, $insert);
 	
 }
 
 if ($_POST['label']=='save_new_comment_about_purchase_sql') {
-              $insert = "INSERT INTO `note` (purchase_descr, id_point) VALUES ('".$_POST['comment']."', '".$_POST['id_point']."')";
+              $insert = "INSERT INTO `deficit_note` (purchase_descr, id_point) VALUES ('".$_POST['comment']."', '".$_POST['id_point']."')";
                 $res = mysqli_query($link, $insert);
-                 $sql = "SELECT MAX(id_note) FROM note";
+                 $sql = "SELECT MAX(id_note) FROM deficit_note";
                   $res = mysqli_query($link,$sql);
                     $last_note_id = mysqli_fetch_assoc($res);
                         $product='тофф++';
-                      $insert = "INSERT INTO `products_parametrs` (name_of_param, product, params_value, id_note) VALUES ('цена', '".$product."','".$_POST['product_price']."','".$last_note_id['MAX(id_note)']."')";
+                      $insert = "INSERT INTO `deficit_products_parametrs` (name_of_param, product, params_value, id_note) VALUES ('цена', '".$product."','".$_POST['product_price']."','".$last_note_id['MAX(id_note)']."')";
                         $res = mysqli_query($link, $insert);
                               //считывание цены и комментариев о покупках в ЭТОЙ точке
                          // $sql= "SELECT id_note,purchase_descr,data_note FROM note WHERE id_point='".$_POST['id_point']."'";
-                           $sql="SELECT note.id_note,note.purchase_descr,note.data_note,products_parametrs.params_value FROM note JOIN products_parametrs WHERE note.id_point='".$_POST['id_point']."' AND note.id_note=products_parametrs.id_note";
+                           $sql="SELECT deficit_note.id_note,deficit_note.purchase_descr,deficit_note.data_note,deficit_products_parametrs.params_value FROM deficit_note JOIN deficit_products_parametrs WHERE deficit_note.id_point='".$_POST['id_point']."' AND deficit_note.id_note=deficit_products_parametrs.id_note";
                              $res = mysqli_query($link, $sql);
                                $all_this_note=MysqliFetchAll($res);
                                //добавление цены из таблицы params_value
@@ -95,7 +95,7 @@ if ($_POST['label'] =='read_markers_sql'){
   $product=$_POST['product'];
 
 
-$sql = "SELECT id_point,lan,lng,name FROM points WHERE product='".$product."'";
+$sql = "SELECT id_point,lan,lng,name FROM deficit_points WHERE product='".$product."'";
      $res = mysqli_query($link,$sql);
           $all_points = MysqliFetchAll($res);
        
@@ -105,13 +105,13 @@ $sql = "SELECT id_point,lan,lng,name FROM points WHERE product='".$product."'";
       
      
         $id_point = $all_points[$j]['id_point'];
-          $sql = "SELECT purchase_descr,data_note,id_note,id_point FROM note WHERE id_point=".$id_point;
+          $sql = "SELECT purchase_descr,data_note,id_note,id_point FROM deficit_note WHERE id_point=".$id_point;
           $res = mysqli_query($link,$sql);
           $all_this_note = MysqliFetchAll($res);
             
           
           for($i=0; $i< count($all_this_note);$i++){
-             $sql = "SELECT params_value FROM products_parametrs WHERE id_note=".$all_this_note[$i]['id_note'];
+             $sql = "SELECT params_value FROM deficit_products_parametrs WHERE id_note=".$all_this_note[$i]['id_note'];
            $res = mysqli_query($link,$sql);
            $this_note_price=MysqliFetchAll($res);
            //$all_this_note[$i]['price']= $this_note_price[0]['params_value'];
@@ -128,13 +128,13 @@ $sql = "SELECT id_point,lan,lng,name FROM points WHERE product='".$product."'";
 
 if ($_POST['label']=='delete_purchase_descr_sql') {
   $id_note=$_POST['id_note'];
-   $sql="DELETE FROM note WHERE id_note=$id_note";
+   $sql="DELETE FROM deficit_note WHERE id_note=$id_note";
     if (mysqli_query($link, $sql)) {
     echo "Record deleted successfully from NOTE.";
 } else {
     echo "Error deleting record: note " . mysqli_error($link);
 }
-    $sql="DELETE FROM products_parametrs WHERE id_note=$id_note";
+    $sql="DELETE FROM deficit_products_parametrs WHERE id_note=$id_note";
       if (mysqli_query($link, $sql)) {
     echo "Record deleted successfully from products_parametrs.";
 } else {
@@ -151,7 +151,7 @@ if($_POST['label']=='delete_empty_point'){
     $res = mysqli_query($link,$sql);
      $all_this_note= MysqliFetchAll($res);
      */
-       $sql="DELETE FROM points WHERE id_point=$id_point";
+       $sql="DELETE FROM deficit_points WHERE id_point=$id_point";
           if (mysqli_query($link, $sql)) {
             echo "Record deleted successfully from POINTS.";
               } else {
@@ -161,7 +161,7 @@ if($_POST['label']=='delete_empty_point'){
  }
   if($_POST['label']=='delete_empty_deficit'){
      $product_name=$_POST['product_name'];
-        $sql = "SELECT product FROM points WHERE product='".$product_name."'";
+        $sql = "SELECT product FROM deficit_points WHERE product='".$product_name."'";
      $res = mysqli_query($link,$sql);
           $all_concurrence = MysqliFetchAll($res);
          // print_arr($all_concurrence);

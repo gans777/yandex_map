@@ -1,6 +1,6 @@
 <?php
 /* если нет таблиц в базе, то генерируются эти*/
-$check= "CREATE TABLE IF NOT EXISTS `note` (
+$check= "CREATE TABLE IF NOT EXISTS `deficit_note` (
   `id_note` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `purchase_descr` varchar(255) NOT NULL,
   `id_point` int(11) NOT NULL,
@@ -9,7 +9,7 @@ $check= "CREATE TABLE IF NOT EXISTS `note` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"; 
 $res = mysqli_query($link, $check);
 
-$check= "CREATE TABLE IF NOT EXISTS  `points` (
+$check= "CREATE TABLE IF NOT EXISTS  `deficit_points` (
   `id_point` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `lan` varchar(20) NOT NULL,
   `lng` varchar(20) NOT NULL,
@@ -21,7 +21,7 @@ $check= "CREATE TABLE IF NOT EXISTS  `points` (
 ";
 $res = mysqli_query($link, $check);
 
-$check= "CREATE TABLE IF NOT EXISTS  `products_parametrs` (
+$check= "CREATE TABLE IF NOT EXISTS  `deficit_products_parametrs` (
   `name_of_param` varchar(20) NOT NULL,
   `product` varchar(20) NOT NULL,
   `params_value` varchar(20) NOT NULL,
@@ -29,14 +29,12 @@ $check= "CREATE TABLE IF NOT EXISTS  `products_parametrs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 $res = mysqli_query($link, $check);
 
-//тут надо добавить рождение таблицы deficit_products
-/*
 $check= "CREATE TABLE IF NOT EXISTS  `deficit_products` (
 `id_product` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `name_of_product` varchar(60) NOT NULL,
 UNIQUE (`id_product`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 $res = mysqli_query($link, $check);
-*/
+
 /*end = если нет таблиц, то генерирует эти*/
 ?>
