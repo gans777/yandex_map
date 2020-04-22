@@ -30,6 +30,13 @@ $check= "CREATE TABLE IF NOT EXISTS  `products_parametrs` (
 $res = mysqli_query($link, $check);
 
 //тут надо добавить рождение таблицы deficit_products
-
+/*
+$check= "CREATE TABLE IF NOT EXISTS  `deficit_products` (
+`id_product` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+`name_of_product` varchar(60) NOT NULL,
+UNIQUE (`id_product`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+$res = mysqli_query($link, $check);
+*/
 /*end = если нет таблиц, то генерирует эти*/
 ?>

@@ -18,8 +18,12 @@ $(document).ready(function(){
       },
            success: function(data){
              console.log(data); 
-             $("#add_new_deficit").modal('hide');//stop here2104
-                      }
+             $("#add_new_deficit").modal('hide');
+                $(".products_name select").append("<option>"+name_of_deficit+"</option>");
+                 var last_option=$(".products_name select>option").length -1;
+                  $('select option:eq('+last_option+')').prop('selected',true);//делает выбранным эту опцию
+                   $('.products_name').trigger('change');// вызывает событие на обработчике событий
+                                         }
                     });//end ajax
   });
 });//end.ready
@@ -345,7 +349,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
                            
           
         });
-                                 if ($(".points_list").is(':empty')) { 
+                                 if ($(".points_list").is(':empty')) { //если поинт последний, то при подтерждении и
                                    console.log(".point_list ПУСТОЙ");
                                     var product_name=$('.products_name select>option:selected').text();
                                      $("#title_deleting_deficit").text('удалить "'+product_name+'"');
