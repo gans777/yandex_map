@@ -33,9 +33,12 @@
 		
         </div>
         </div>
-        <button type="button" class="btn btn-secondary btn-lg add_new_deficit"><i class="fa fa-plus" aria-hidden="true"></i>
+        <button type="button" class="d-none d-sm-block btn btn-secondary btn-lg add_new_deficit"><i class="fa fa-plus" aria-hidden="true"></i>
         <i class="fa fa-sitemap" aria-hidden="true"></i> новый дефицит
 </button>
+  <button type="button" class="d-block d-sm-none btn btn-secondary btn add_new_deficit"><i class="fa fa-plus" aria-hidden="true"></i>
+        <i class="fa fa-sitemap" aria-hidden="true"></i> новый дефицит
+   </button>
         </div>
 <div class="wrap_map">
 	<div id="map" style="width: 90%; height: 300px">

@@ -1,7 +1,7 @@
 <?php
 
 
-$link = @mysqli_connect("127.0.0.1", "root", "", "deficit");
+$link = @mysqli_connect("127.0.0.1", "root", "root", "deficit");
 
 //$link = @mysqli_connect("127.0.0.1", "gans", "Palkdmrywt82xcDEjc", "gans");
 

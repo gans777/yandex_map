@@ -1,5 +1,8 @@
 <?php
 /* если нет таблиц в базе, то генерируются эти*/
+
+
+
 $check= "CREATE TABLE IF NOT EXISTS `deficit_note` (
   `id_note` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `purchase_descr` varchar(255) NOT NULL,
