@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>чтение маркеров в данной категории</title>
+	<title>дефицит</title>
 	
         <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=9c6493e9-1ae2-463f-9c8d-737e2f259b07" type="text/javascript"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -35,10 +35,10 @@
         </div>
         <button type="button" class="d-none d-sm-block btn btn-secondary btn-lg add_new_deficit"><i class="fa fa-plus" aria-hidden="true"></i>
         <i class="fa fa-sitemap" aria-hidden="true"></i> новый дефицит
-</button>
-  <button type="button" class="d-block d-sm-none btn btn-secondary btn add_new_deficit"><i class="fa fa-plus" aria-hidden="true"></i>
+         </button>
+         <button type="button" class="d-block d-sm-none btn btn-secondary btn add_new_deficit"><i class="fa fa-plus" aria-hidden="true"></i>
         <i class="fa fa-sitemap" aria-hidden="true"></i> новый дефицит
-   </button>
+          </button>
         </div>
 <div class="wrap_map">
 	<div id="map" style="width: 90%; height: 300px">

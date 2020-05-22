@@ -1,4 +1,5 @@
 $(document).ready(function(){
+   current_deficit_to_title();//в title переносит текущий дефицит из select
   $(".add_new_deficit").click(function(){
     $("#add_new_deficit").modal('show');
   });
@@ -33,8 +34,8 @@ ymaps.ready(init);
 function init(){
 
       $( ".products_name" ).change(function() { // по какому товару карту выводить
-       console.log( $(".products_name option:selected").text());
-      myMap.geoObjects.removeAll();
+        current_deficit_to_title();
+         myMap.geoObjects.removeAll();
        
          read_markers_all(myMap);
   });
@@ -490,6 +491,10 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
         
         }//end init
    
+function current_deficit_to_title(){
+    var current_deficit=$(".products_name>select option:selected").text();
+    $("title").text(current_deficit);//в title считывает дефиит из select
+   }
 function html_wrap_close_and_addinfo(){
    var note="";
             note+="<div class='wrap_close_and_addinfo'>";
