@@ -389,6 +389,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
 
 // добавление новой точки в текущем товаре
     $(".add_point").click(function(){
+      $(".points_list").fadeOut();// скрывает список поинтов
     	$(".wrap_coord_point").fadeIn(800);
     	$(".out_add_point").fadeIn(800);
     	$(".add_point").fadeOut();
@@ -438,7 +439,9 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
             console.log('не все поля заполнены');
             return;
     }
-   
+   /* 
+надо  будет очистить все поля формы
+   */
       
       $.ajax({  
         type:'post',
@@ -456,10 +459,11 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
         	console.log(data);
         	myMap.geoObjects.removeAll();//удаляет все маркеры с карты
            read_markers_all(myMap);
+           $(".points_list").fadeIn(800);//возвращение панели с точками
  
   }});
 
-     $(".wrap_coord_point").fadeOut(800);
+     $(".wrap_coord_point").fadeOut();
     	$(".add_point").fadeIn();
     	$(".out_add_point").fadeOut();
     	myMap.events.remove('click', callback);
@@ -475,6 +479,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
     });//end .save
 
           $(".out_add_point").click(function(){ // выход из "добавить точку"  не оставив сохранений
+       $(".points_list").fadeIn(800);    
     	$(".wrap_coord_point").fadeOut(800);
     	$(".add_point").fadeIn();
     	$(".out_add_point").fadeOut();

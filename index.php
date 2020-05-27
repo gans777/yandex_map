@@ -8,10 +8,10 @@
         <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=9c6493e9-1ae2-463f-9c8d-737e2f259b07" type="text/javascript"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
-    <link rel="stylesheet" href="css/style.css?rnd=211">
+    <link rel="stylesheet" href="css/style.css?rnd=213">
 </head>
 <body>
-	<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+	
 
 	<div class="container">
         <div class="wrap_header">
@@ -55,23 +55,29 @@
         <div class="point_list"></div>
         	
         </div>
+        <!--
         <div class="wrap_button_point">
 <button type="button" class="btn btn-danger out_add_point" style="display: none;">выйти из режима "Добавления точки"</button>
          </div>
-</div>
-	<div class="wrap_coord_point" style="display: none;">
-			
-		<div>широта: <input type="text" name="lan"> долгота:<input type="text" name="lng"></div>
+       -->
+          <div class="wrap_coord_point" style="display: none;">
+      
+    <p><label for="lan_field">широта: </label> <input type="text" name="lan" id="lan_field"> <label for="lng_field"> долгота: </label><input type="text" name="lng" id="lng_field"></p>
           
           
-          <div>название точки:<input type="text" name="name_point"></div>
-          <div>стоимость:<input type="text" name="price_"></div>
+          <p><label for="name_point_field">название точки:</label><input type="text" name="name_point" id="name_point_field"></p>
+          <p><label for="price_field">стоимость: </label><input type="text" name="price_" id="price_field"></p>
           
-		<div>комментарий</div><textarea name="description_point_"  cols="40" rows="4"></textarea>
+  <p> <label for="description_point_field">комментарий:</label><br><textarea name="description_point_"  cols="40" rows="4" id="description_point_field"></textarea></p>
 
-		<button type="button" class="btn btn-primary save">сохранить</button>
-	</div>
-	</div>
+    <button type="button" class="btn btn-primary save">сохранить</button>
+     <div class="wrap_out_add_point_x">
+       <button type="button" class="btn btn-danger out_add_point mr-1 out_add_point"><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
+     </div>
+  </div>
+</div><!--end class=container-->
+	
+	
 	<!--html для модального окна для удаления note-->
 	<div class="modal fade" id="delete_note" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered-sm" role="document">

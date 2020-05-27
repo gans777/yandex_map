@@ -10,6 +10,19 @@ body {
 	justify-content: space-around;
 	align-items: center;
 }
+.wrap_coord_point{
+	border:1px solid #dc3545;
+	padding: 10px;
+	position: relative;
+
+}
+.wrap_coord_point input {
+	margin-left: 7px;
+}
+.wrap_out_add_point_x {
+	position: absolute;
+	top:-35px;
+}
 .points_list {
 	display: flex;
 	flex-wrap: wrap;
