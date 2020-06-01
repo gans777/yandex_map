@@ -4,6 +4,9 @@ body {
 
 .wrap_map {
 	position:relative;
+	display: flex;
+	justify-content: center;
+
 }
 .wrap_header{
 	display:flex;

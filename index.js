@@ -40,10 +40,22 @@ function init(){
          read_markers_all(myMap);
   });
 
+     var center_lng=47.2313455;
+      var center_lat=39.7232855
+    var deficit= $("#map").attr("data-deficit");
+     if(deficit!=undefined) {console.log("i am not undefined");
+      var center_lng=Number($("#map").attr("data-center_lng"));
+      var center_lat=Number($("#map").attr("data-center_lat"));
+     console.log("this deficit="+deficit+ "lng="+center_lng +" center_lat="+center_lat);
+           $('select option:contains("'+deficit+'")').prop('selected',true);//делает выбранным эту опцию
+        // stop here 2062020
+   }
+    
+     // myMap.setCenter([center_lat,center_lng]);
         // Создание карты.  
          var geolocation = ymaps.geolocation,
         myMap = new ymaps.Map('map', {
-            center: [47.2313455, 39.7232855],
+            center: [center_lng, center_lat],
             zoom: 12
         }, {
             searchControlProvider: 'yandex#search',
@@ -65,7 +77,8 @@ function init(){
         });
               
         myMap.geoObjects.add(result.geoObjects);
-        myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());
+        if(deficit==undefined){
+        myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());}
         // var lan=result.geoObjects.get(0).geometry.getCoordinates()[0];// так брать координаты
     
         myMap.setZoom(12);
@@ -82,7 +95,8 @@ function init(){
             balloonContentBody: 'Мое местоположение вычисленное  браузером'
         });
         myMap.geoObjects.add(result.geoObjects);
-        myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());
+        if(deficit==undefined){
+        myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());}
         myMap.setZoom(12);
     });
     
@@ -440,7 +454,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
             return;
     }
    /* 
-надо  будет очистить все поля формы
+надо  будет очистить все поля формы добавления точки перед записиью их в базу
    */
       
       $.ajax({  
@@ -493,6 +507,30 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
    
     $(this).closest(".wrap_add_comment_into_point").css("display","none");
      });
+
+    $(".this_photo_map").click(function(){
+       var current_deficit=$(".products_name>select option:selected").text();
+      // res.geoObjects.get(0).geometry.getCoordinates()
+       console.log(current_deficit);
+       var lng=myMap.getCenter()[0];
+       var lat=myMap.getCenter()[1];
+       console.log("lng="+lng+" "+"lat="+lat);
+       console.log(location.href);
+       var url_for_frend=location.href + "index.php?deficit="+current_deficit+"&lng="+lng+"&lat="+lat;
+       $(".wrap_this_photo_map>input").val(url_for_frend);
+
+
+    });
+    $(".copy_photo_map_link_to_buffer").click(function(){
+      // console.log("copy_photo_map_link_to_buffer");
+      var copyText = document.getElementById("input_photo_map_link");
+  copyText.select();
+  document.execCommand("copy");
+  //alert("Copied the text: " + copyText.value);
+    });
+
+
+
         
         }//end init
    

@@ -29,6 +29,8 @@
                 	echo "<option>".$value['name_of_product']."</option>".PHP_EOL;
                 }
                 echo "</select>";
+                
+              
 			 ?>
 		
         </div>
@@ -41,11 +43,18 @@
           </button>
         </div>
 <div class="wrap_map">
-	<div id="map" style="width: 90%; height: 300px">
+	<div id="map" style="width: 94%; height: 300px;" <?php 
+            /* ccылка для друга */
+                if(isset($_GET['deficit'])){
+                  echo "data-deficit=\"".$_GET['deficit']."\" data-center_lng=\"".$_GET['lng']."\" data-center_lat=\"".$_GET['lat']."\"";
+                  
+                }
+   ?>>
 		
 	</div>
+</div>
 	<div class="points_list"><ul></ul></div>
-	</div>
+	
 	<div class="wrap_out_add_point">
 		<div class="wrap_button_point">
 <button type="button" class="btn btn-primary add_point" >
@@ -75,6 +84,10 @@
        <button type="button" class="btn btn-danger out_add_point mr-1 out_add_point"><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
      </div>
   </div>
+
+  <!-- отправить данный вид карты другу -->
+  <div class="wrap_this_photo_map"><input type="text" style="width:70%;" id="input_photo_map_link"><button type="button" class="btn btn-secondary copy_photo_map_link_to_buffer">скопировать в буфер</button><button type="button" class="btn btn-warning this_photo_map" >ссылка на данный вид карты</button></div>
+
 </div><!--end class=container-->
 	
 	
