@@ -99,7 +99,7 @@ function init(){
         myMap.geoObjects.add(result.geoObjects);
         if(deficit==undefined){
         myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());}
-        myMap.setZoom(12);
+        myMap.setZoom(center_zoom);
     });
     
          /*
@@ -520,6 +520,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
        console.log("lng="+lng+" "+"lat="+lat+" zoom="+ zoom);
        console.log(location.href);
        var url_for_frend=location.href + "index.php?deficit="+current_deficit+"&lng="+lng+"&lat="+lat+"&zoom="+zoom;
+       $(".wrap_this_photo_map>input").val();//предворительная очистка поля ввода 
        $(".wrap_this_photo_map>input").val(url_for_frend);
 
 
