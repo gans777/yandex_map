@@ -41,11 +41,13 @@ function init(){
   });
 
      var center_lng=47.2313455;
-      var center_lat=39.7232855
+      var center_lat=39.7232855;
+       var center_zoom=12;
     var deficit= $("#map").attr("data-deficit");
      if(deficit!=undefined) {console.log("i am not undefined");
       var center_lng=Number($("#map").attr("data-center_lng"));
       var center_lat=Number($("#map").attr("data-center_lat"));
+      var center_zoom=Number($("#map").attr("data-center_zoom"));
      console.log("this deficit="+deficit+ "lng="+center_lng +" center_lat="+center_lat);
            $('select option:contains("'+deficit+'")').prop('selected',true);//делает выбранным эту опцию
         // stop here 2062020
@@ -56,7 +58,7 @@ function init(){
          var geolocation = ymaps.geolocation,
         myMap = new ymaps.Map('map', {
             center: [center_lng, center_lat],
-            zoom: 12
+            zoom: center_zoom
         }, {
             searchControlProvider: 'yandex#search',
             'hasBalloon': true,
@@ -81,7 +83,7 @@ function init(){
         myMap.setCenter(result.geoObjects.get(0).geometry.getCoordinates());}
         // var lan=result.geoObjects.get(0).geometry.getCoordinates()[0];// так брать координаты
     
-        myMap.setZoom(12);
+        myMap.setZoom(center_zoom);
     });
 
     geolocation.get({
@@ -514,9 +516,10 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
        console.log(current_deficit);
        var lng=myMap.getCenter()[0];
        var lat=myMap.getCenter()[1];
-       console.log("lng="+lng+" "+"lat="+lat);
+       var zoom=myMap.getZoom();
+       console.log("lng="+lng+" "+"lat="+lat+" zoom="+ zoom);
        console.log(location.href);
-       var url_for_frend=location.href + "index.php?deficit="+current_deficit+"&lng="+lng+"&lat="+lat;
+       var url_for_frend=location.href + "index.php?deficit="+current_deficit+"&lng="+lng+"&lat="+lat+"&zoom="+zoom;
        $(".wrap_this_photo_map>input").val(url_for_frend);
 
 

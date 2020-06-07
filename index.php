@@ -46,7 +46,7 @@
 	<div id="map" style="width: 94%; height: 300px;" <?php 
             /* ccылка для друга */
                 if(isset($_GET['deficit'])){
-                  echo "data-deficit=\"".$_GET['deficit']."\" data-center_lng=\"".$_GET['lng']."\" data-center_lat=\"".$_GET['lat']."\"";
+                  echo "data-deficit=\"".$_GET['deficit']."\" data-center_lng=\"".$_GET['lng']."\" data-center_lat=\"".$_GET['lat']."\""." data-center_zoom=\"".$_GET['zoom']."\"";
                   
                 }
    ?>>
