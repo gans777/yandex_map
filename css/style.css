@@ -119,5 +119,14 @@ body {
 	top:80px;
 	background-color: #e3c022;
 }
-
+.edit_point{
+	position: absolute;
+	right: 3px;
+}
+.wrap_edit_coord_point {
+	position: relative;
+	border: 1px solid #79c142;
+	padding: 5px;
+	margin-bottom: 5px;
+}
 /* записи в быллонах поинтов*/

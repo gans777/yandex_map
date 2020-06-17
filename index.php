@@ -85,6 +85,21 @@
      </div>
   </div>
 
+  <div class="wrap_edit_coord_point" style="display: none;">
+      <p><label for="lan_field">широта: </label> <input type="text" name="lan" id="lan_field"> <label for="lng_field"> долгота: </label><input type="text" name="lng" id="lng_field"></p>
+          
+          
+          <p><label for="name_point_field">название точки:</label><input type="text" name="name_point" id="name_point_field"></p>
+          
+          
+  
+
+    <button type="button" class="btn btn-primary save_edit_point">сохранить</button>
+     <div class="wrap_out_add_point_x">
+       <button type="button" class="btn btn-danger out_add_point mr-1 out_edit_coord_point"><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
+     </div>
+  </div>
+
   <!-- отправить данный вид карты другу -->
   <div class="wrap_this_photo_map"><input type="text" style="width:70%;" id="input_photo_map_link"><button type="button" class="btn btn-secondary copy_photo_map_link_to_buffer">скопировать в буфер</button><button type="button" class="btn btn-warning this_photo_map" >ссылка на данный вид карты</button></div>
 
@@ -165,6 +180,8 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://use.fontawesome.com/819122889b.js"></script>
+<!--<script src="http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.js"></script>-->
+
 
 	<script src="index.js"></script>
 </body>

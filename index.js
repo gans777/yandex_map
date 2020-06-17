@@ -182,7 +182,7 @@ function init(){
       */
       // определить открыте id точки и открыто ли окно - 
       console.log("event.target="+e.target.tagName);
-      if (e.target.tagName != 'DIV' ) { return;}
+      if (e.target.tagName != 'SPAN' ) { return;}
       var id_point= $(this).attr('id_point');
        if (opening_window_point != undefined) 
         { 
@@ -520,20 +520,61 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
        console.log("lng="+lng+" "+"lat="+lat+" zoom="+ zoom);
        console.log(location.href);
        var url_for_frend=location.href + "index.php?deficit="+current_deficit+"&lng="+lng+"&lat="+lat+"&zoom="+zoom;
-       $(".wrap_this_photo_map>input").val();//предворительная очистка поля ввода 
-       $(".wrap_this_photo_map>input").val(url_for_frend);
+       $("#input_photo_map_link").val();//предворительная очистка поля ввода 
+       $("#input_photo_map_link").val(url_for_frend);
 
 
     });
     $(".copy_photo_map_link_to_buffer").click(function(){
-      // console.log("copy_photo_map_link_to_buffer");
       var copyText = document.getElementById("input_photo_map_link");
-  copyText.select();
-  document.execCommand("copy");
-  //alert("Copied the text: " + copyText.value);
+      copyText.select();
+      document.execCommand("copy");
+  
     });
 
+    $(".points_list").delegate("button.edit_point","click",function(){
+      console.log("будем редактировать");
+      $(".wrap_edit_coord_point").fadeIn(800);
+       var id_point = $(this).closest(".info_point").attr('id_point');
+        var lan= $(this).closest(".info_point").attr('lan');
+         $(".wrap_edit_coord_point").find('#lan_field').val(lan);
+         var lng= $(this).closest(".info_point").attr('lng');
+           $(".wrap_edit_coord_point").find('#lng_field').val(lng);
+          var name_this_point=$(this).closest(".info_point").find(".name_this_point").text();
+            $(".wrap_edit_coord_point").find('#name_point_field').val(name_this_point);
+        console.log('id_point='+id_point +"name_point="+name_this_point);
 
+
+         //удаление выпадающего меню точки с комментариями покупок (надо будет это в функцию спрятать-- повтор кода!!!)
+             opening_window_point=undefined;
+      $(this).closest(".wrap_dropdown_info").removeAttr("style");
+       $(this).closest(".info_point").removeClass("toggle_name_point_dropdown_on");
+         myMap.geoObjects.each(function(geoObject){
+                              
+                          if (geoObject.options.get('last_center')==1){
+                               geoObject.options.set({'last_center':0});
+                                geoObject.options.set({'iconColor': '#79c142'});// восстановление цвета маркера на прежний
+                          }
+                          /*
+                           if (id_point==geoObject.options.get('id_point')) {
+                              geoObject.options.set({'iconColor': '#bada55'});//цвет маркера в центре карты
+                               geoObject.options.set({'last_center':1});
+                           }
+                           */
+          
+        });
+         //end удаление выпадающего меню точки с комментариями покупок (надо будет это в функцию спрятать-- повтор кода!!!)
+         $(".points_list").toggle();
+         $(".wrap_button_point").toggle();// cкрытие кнопки ДОБАВИТЬ ТОЧКУ
+
+         //надо заменить маркер на  РЕДАКТИРУЕМЫЙ и добывить сохранение новых координат и названия в базу; 18.06
+
+    });
+    $(".out_edit_coord_point").click(function(){
+      $(".wrap_edit_coord_point").fadeOut(800);
+      $(".points_list").toggle();
+      $(".wrap_button_point").toggle();// появление кнопки ДОБАВИТЬ ТОЧКУ
+    });
 
         
         }//end init
@@ -546,7 +587,8 @@ function html_wrap_close_and_addinfo(){
    var note="";
             note+="<div class='wrap_close_and_addinfo'>";
             note+="<button type=\"button\" class=\"close_wrap_dropdown_info btn btn-success mr-1\"><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i></button>";
-            note+="<button type='button' class='add_info btn btn-info' title='записать отзыв о покупке/наличии дефицита'><i class=\"fa fa-cart-plus fa-lg\" aria-hidden=\"true\"></i> наличие</button>";// кнопки добовления комментариев
+            note+="<button type='button' class='add_info btn btn-info' title='записать отзыв о покупке/наличии дефицита'><i class=\"fa fa-cart-plus fa-lg\" aria-hidden=\"true\"></i> куплено</button>";// кнопки добовления комментариев
+            note+="<button type='button' class='btn btn-secondary edit_point'><i class=\"fa fa-cog fa-lg\" aria-hidden=\"true\"></i></button>";
             note+="<div class='wrap_add_comment_into_point'>";
             note+="<button type='button' class='no_add_info btn btn-danger'><i class=\"fa fa-times fa-lg\" aria-hidden=\"true\"></i> </button>";
             note+="<div>стоимость:<input type='text' name='price'></div><div>комментарий</div><textarea name='description_point'  cols='40' rows='4'></textarea><button type='button' class='btn btn-primary' id='save_comment_about_product'>сохранить</button></div>";
@@ -600,7 +642,7 @@ function html_wrap_note_this(value,last_add_purchase_descr='') {
         }));
             
               
-            $('.points_list').append('<div class="info_point" lan='+value.lan +' lng='+ value.lng +' id_point='+value.id_point+'><span>'+count+'.</span>'+value.name+
+            $('.points_list').append('<div class="info_point" lan='+value.lan +' lng='+ value.lng +' id_point='+value.id_point+'><span>'+count+'.</span>'+'<span class="name_this_point">'+value.name+'</span>'+
               '<span class="point_price" alt="последняя цена">'+value[size-5].params_value+'р.</span><div class="wrap_dropdown_info">'+note+'</div></div>');
             count++;
             });
