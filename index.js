@@ -535,10 +535,10 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
     $(".points_list").delegate("button.edit_point","click",function(){
       console.log("будем редактировать");
       $(".wrap_edit_coord_point").fadeIn(800);
-       var id_point = $(this).closest(".info_point").attr('id_point');
-        var lan= $(this).closest(".info_point").attr('lan');
+       var id_point = Number($(this).closest(".info_point").attr('id_point'));
+        var lan= Number($(this).closest(".info_point").attr('lan'));
          $(".wrap_edit_coord_point").find('#lan_field').val(lan);
-         var lng= $(this).closest(".info_point").attr('lng');
+         var lng=Number($(this).closest(".info_point").attr('lng'));
            $(".wrap_edit_coord_point").find('#lng_field').val(lng);
           var name_this_point=$(this).closest(".info_point").find(".name_this_point").text();
             $(".wrap_edit_coord_point").find('#name_point_field').val(name_this_point);
@@ -549,32 +549,83 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
              opening_window_point=undefined;
       $(this).closest(".wrap_dropdown_info").removeAttr("style");
        $(this).closest(".info_point").removeClass("toggle_name_point_dropdown_on");
+
+         var plasemark;// функция ГДЕ КЛИК- ТАМ и МАРКЕР
+      var callback = function (e) {
+          if (typeof plasemark != 'undefined') {
+            myMap.geoObjects.remove(plasemark);// удаляет маркер
+            }
+        
+        if (!myMap.balloon.isOpen()) {
+            var coords = e.get('coords');
+             
+          $('[id="lan_field"]').val(coords[0]);
+           $('[id="lng_field"]').val(coords[1]);
+           
+           plasemark = new ymaps.Placemark([coords[0], coords[1]], {
+            balloonContent: ' <strong>уточненная координата ПОИНТА</strong>'
+        }, {
+            preset: 'islands#redSportIcon',
+            iconColor: '#ff05b6'
+        });
+            
+            myMap.geoObjects.add(plasemark);
+                
+        }
+        else {
+            myMap.balloon.close();
+        }
+
+    myMap.setCenter([coords[0], coords[1]]);// перемещение  центра карты по координатам маркера
+
+    };// end callback
+
          myMap.geoObjects.each(function(geoObject){
                               
                           if (geoObject.options.get('last_center')==1){
                                geoObject.options.set({'last_center':0});
                                 geoObject.options.set({'iconColor': '#79c142'});// восстановление цвета маркера на прежний
+                               // myMap.geoObjects.remove(geoObject); //убираем прежний маркер
+                                 geoObject.options.set('visible', false);// делает маркер невидимым
+                                 plasemark = new ymaps.Placemark([lan, lng], {
+            balloonContent: ' <strong>уточненная координата ПОИНТА</strong>'
+        }, {
+            preset: 'islands#redSportIcon',
+            iconColor: '#ff05b6'
+        });
+            
+            myMap.geoObjects.add(plasemark);
                           }
-                          /*
-                           if (id_point==geoObject.options.get('id_point')) {
-                              geoObject.options.set({'iconColor': '#bada55'});//цвет маркера в центре карты
-                               geoObject.options.set({'last_center':1});
-                           }
-                           */
+                        
           
         });
          //end удаление выпадающего меню точки с комментариями покупок (надо будет это в функцию спрятать-- повтор кода!!!)
-         $(".points_list").toggle();
+         $(".points_list").toggle();// скрытие меню с ТОЧКАМИ
          $(".wrap_button_point").toggle();// cкрытие кнопки ДОБАВИТЬ ТОЧКУ
 
+       
+              
+      myMap.events.add('click', callback);//myMap.events--где кликнешь- там и маркер
          //надо заменить маркер на  РЕДАКТИРУЕМЫЙ и добывить сохранение новых координат и названия в базу; 18.06
-
-    });
-    $(".out_edit_coord_point").click(function(){
+ $(".out_edit_coord_point").click(function(){// этот слушатель событий помещен внутрь слушателя button.edit.point, чтоб через plasemark удалить временный маркер
       $(".wrap_edit_coord_point").fadeOut(800);
-      $(".points_list").toggle();
+      $(".points_list").fadeIn();
       $(".wrap_button_point").toggle();// появление кнопки ДОБАВИТЬ ТОЧКУ
-    });
+
+             myMap.geoObjects.each(function(geoObject){ //делает видимыми все маркеры
+              if (!geoObject.options.get('visible')) {
+               geoObject.options.set('visible', true);
+              }
+             myMap.geoObjects.remove(plasemark);// удаляет маркер
+                                       
+                                                                      
+        });
+
+    });//end out_edit_coord_point
+
+
+    });//end button.edit.point
+   //19.06 stop here- надо сохранение данных на клик по save_edit_point
 
         
         }//end init
