@@ -10,19 +10,7 @@ if ($_POST['label']=='add_new_deficit'){
   
 }
 
-if ($_POST['label']=='save_new_marker') { // это old -- надо будет удалить
-	$name_point=$_POST['name_point'];
-    $description_point=$_POST['description_point'];
-    $lan=$_POST['lan'];
-    $lng=$_POST['lng'];
-    $current = $lan.'||'.$lng.'||'.$name_point.'||'.$description_point.PHP_EOL;
-	
-	$path = "../points/"."drugs".".txt";
 
-	if (file_put_contents($path, $current, FILE_APPEND | LOCK_EX)){echo $current;} else {echo "not save";}
-	
-	
-}
 if ($_POST['label']=='save_new_marker_sql') {
 	$name_point=$_POST['name_point'];
     $comment=$_POST['description_point'];
@@ -60,6 +48,11 @@ echo "пытаюсь записать $name_point || $lan ||$lng||$product||$cat
                 $insert = "INSERT INTO `deficit_products_parametrs` (name_of_param,	product, params_value, id_note) VALUES ('цена', '".$product."','".$product_price."','".$last_note_id['MAX(id_note)']."')";
                    $res = mysqli_query($link, $insert);
 	
+}
+
+if ($_POST['label']=='save_edit_marker'){
+   $sql ="UPDATE deficit_points SET lan='".$_POST['lan']."', lng='".$_POST['lng']."', name='".$_POST['name_point']."' WHERE id_point=".$_POST['id_point'];
+    $result=mysqli_query($link,$sql);
 }
 
 if ($_POST['label']=='save_new_comment_about_purchase_sql') {

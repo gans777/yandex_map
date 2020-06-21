@@ -623,10 +623,37 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
 
     });//end out_edit_coord_point
 
+           //19.06 stop here- надо сохранение данных на клик по save_edit_point
+     $(".save_edit_point").click(function(){ //save edit_point to mysql -(этот слушатель внутрь слушателя button.edit.point)
+      
+      var lan=$(".wrap_edit_coord_point").find('[id = "lan_field"]').val();
+       var lng=$(".wrap_edit_coord_point").find('[id = "lng_field"]').val();//19.06 stop here
+        var name_point=$(".wrap_edit_coord_point").find("#name_point_field").val();
+         // var id_point = Number($(this).closest(".info_point").attr('id_point'));
+         console.log("save data to mysql= "+name_point+ ' lan='+lan+ ' lng='+lng+ " id_point"+ id_point);
+          
+                    $.ajax({   // сохранение отредактированных данных поинта(название и координаты)
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'save_edit_marker',
+              'lan': lan,
+              'lng': lng,
+              'name_point': name_point,
+              'id_point': id_point
+            },
+           success: function(data){ 
+                    $('.wrap_edit_coord_point').fadeOut();
+                    $('.points_list').fadeIn(800);
+                    myMap.geoObjects.removeAll();//удаляет все маркеры с карты
+                    read_markers_all(myMap);
 
+                               }
+               });
+         
+     });
     });//end button.edit.point
-   //19.06 stop here- надо сохранение данных на клик по save_edit_point
 
+ 
         
         }//end init
    
