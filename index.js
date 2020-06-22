@@ -247,14 +247,12 @@ $(".points_list").delegate("button.close_wrap_dropdown_info ", "click", function
       var id_point=$(this).parent().parent().parent().attr("id_point");
 console.log("id_point= "+ id_point);//номер id поинта
 $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").show();// показвает форму добавления комментария
- //$("[id_point='"+id_point+"']").find("button.add_info").toggle();// показывает/скрывает кнопку "добавить инфо о цене"
-  //$("[id_point='"+id_point+"']").find("button.no_add_info").toggle();
+ 
  });
 
 
   $(".points_list").delegate("#save_comment_about_product", "click", function(){// сохранение цены и комментария о ПОСЛЕДНЕЙ покупке  в выбранном Поинте
- console.log('сохранение цены и комментария о покупке');
-
+ 
  var id_point=$(this).parent().parent().parent().parent().attr("id_point");
  console.log("id_point="+ id_point);
          var price=$(this).siblings().find('[name="price"]').val();
@@ -288,6 +286,12 @@ $("[id_point='"+id_point+"']").find(".wrap_add_comment_into_point").show();// п
                 +"<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div> "+"</div>" ;
                     */
                  $("[id_point='"+id_point+"']").find(".point_price").html(data_object[i]['params_value']+"р.");//выводит на главную панель меню последнюю стоимость
+                 
+                 myMap.geoObjects.each(function(geoObject){ //добавляет в маркер оследнюю стоимость
+                  if (geoObject.options.get('id_point')==id_point){
+                       geoObject.properties.set({'iconContent': data_object[i]['params_value']});
+                                 }
+                 });
                   } else {
                     note+=html_wrap_note_this(data_object[i]);
                     /*
@@ -334,7 +338,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
         data:{'label':'delete_purchase_descr_sql',
               'id_note': id_note
               
-      },
+      },                    //stop here 23.06
            success: function(data){
                 console.log(data);//stop here 0504 (теперь обновить меню ПОИНТА)
                 $('#delete_note').modal('hide');//это бутсраповское модальное окно
@@ -602,6 +606,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
          //end удаление выпадающего меню точки с комментариями покупок (надо будет это в функцию спрятать-- повтор кода!!!)
          $(".points_list").toggle();// скрытие меню с ТОЧКАМИ
          $(".wrap_button_point").toggle();// cкрытие кнопки ДОБАВИТЬ ТОЧКУ
+         $(".wrap_this_photo_map").fadeOut();//скрытие "фото карты"
 
        
               
@@ -611,7 +616,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
       $(".wrap_edit_coord_point").fadeOut(800);
       $(".points_list").fadeIn();
       $(".wrap_button_point").toggle();// появление кнопки ДОБАВИТЬ ТОЧКУ
-
+       $(".wrap_this_photo_map").fadeIn();//возвращение "фото карты"
              myMap.geoObjects.each(function(geoObject){ //делает видимыми все маркеры
               if (!geoObject.options.get('visible')) {
                geoObject.options.set('visible', true);
@@ -623,7 +628,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
 
     });//end out_edit_coord_point
 
-           //19.06 stop here- надо сохранение данных на клик по save_edit_point
+           
      $(".save_edit_point").click(function(){ //save edit_point to mysql -(этот слушатель внутрь слушателя button.edit.point)
       
       var lan=$(".wrap_edit_coord_point").find('[id = "lan_field"]').val();
@@ -644,6 +649,7 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
            success: function(data){ 
                     $('.wrap_edit_coord_point').fadeOut();
                     $('.points_list').fadeIn(800);
+                     $(".wrap_this_photo_map").fadeIn();//появление "фото карты"
                     myMap.geoObjects.removeAll();//удаляет все маркеры с карты
                     read_markers_all(myMap);
 
@@ -700,11 +706,8 @@ function html_wrap_note_this(value,last_add_purchase_descr='') {
             // последние 4-е элемента объекта id_point, lan,lng, name - все остальное ЗАМЕТКИ(purchase_descr)-- поэтому вычитаем 5
              for(var  i=(size-5);i >= 0;i--){
                 note+= html_wrap_note_this(value[i]);
-                /*
-                note+= "<div class='wrap_note_this' data-id_note='"+value[i]['id_note']+"'><div class='note_this'>"+value[i]['purchase_descr']
-                + "</div><div class='data_note'>"+value[i]['data_note']+"</div><div class='last_price'>"+value[i]['price']+"р.</div>"+
-                 "<div class='delete_this_note'><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></div>"+"</div>" ;
-                */
+                
+             
             // описание покупки для  показа в балоне маркера (описание покупки, время, цена)
              } 
              var balloon_last_purchase="<div class='wrap_note_this' data-id_note='"+value[size-5]['id_note']+"'><div class='note_this'>"+value[size-5].purchase_descr
@@ -712,11 +715,13 @@ function html_wrap_note_this(value,last_add_purchase_descr='') {
                  "</div>" ;// здесь может лучше еще маленькое фото поинта добавить 
              
             myMap.geoObjects.add(new ymaps.Placemark([Number(value.lan), Number(value.lng)], {
+            iconContent: value[size-5].params_value,
             balloonContent: '<strong>'+ value.name+'</strong><br>'+ balloon_last_purchase   //содержимое балуна
         }, {
             preset: 'islands#icon',
             iconColor: '#79c142',// основной цвет маркеров
-            id_point: value.id_point 
+            id_point: value.id_point ,
+
         }));
             
               
