@@ -345,8 +345,31 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
                 var this_wrap_dropdown_info=$("[data-id_note='"+id_note+"']").closest(".info_point");
                 $("[data-id_note='"+id_note+"']").remove();
                 var last_price = this_wrap_dropdown_info.find('.last_price:eq(0)').text();//определяет цену из последнего отзыва
+
                  this_wrap_dropdown_info.find(".point_price").html(last_price);// вставляет цену из последнего отзыва в титульную панель
-                  
+                  // надо в маркер цену вставить 28.06 !!!
+                                           myMap.geoObjects.each(function(geoObject){
+                                           // console.log(geoObject.options.get('id_point'));
+                              
+                              
+                          if (geoObject.options.get('id_point')==id_point){
+                               //geoObject.options.set({'last_center':0});
+                               // geoObject.options.set({'iconColor': '#79c142'});// восстановление цвета маркера на прежний
+                                //geoObject.options.remove();
+                               // myMap.geoObjects.remove(geoObject);
+                               console.log("id_point comparision="+id_point);
+                               geoObject.properties.set({
+
+                                iconContent: last_price
+                               });
+                              //stop here -2906 -вроде подставлет верхнюю в списке цену покупки- теперь надо...
+                            
+                          }
+                           
+          
+        });
+
+
                   if (how_many_wrap_note_this==1) {
                     console.log('тут последний коммент id_point='+ id_point);
                     $.ajax({
