@@ -83,6 +83,9 @@
      <div class="wrap_out_add_point_x">
        <button type="button" class="btn btn-danger out_add_point mr-1 out_add_point"><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
      </div>
+     <div class="help_info_for_users_add_point">
+       Кликните на карте место торговой точки.
+     </div>
   </div>
 
   <div class="wrap_edit_coord_point" style="display: none;">

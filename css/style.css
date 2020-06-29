@@ -13,6 +13,7 @@ body {
 	justify-content: space-around;
 	align-items: center;
 }
+/* окно добавления поинта */
 .wrap_coord_point{
 	border:1px solid #dc3545;
 	padding: 10px;
@@ -26,6 +27,18 @@ body {
 	position: absolute;
 	top:-35px;
 }
+.help_info_for_users_add_point {
+	position: absolute;
+	top:-25px;
+	left: 60px;
+	font-style: italic;
+	border: 1px solid #ed8013;
+	border-radius: 15px;
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color:#fad178;
+}
+/* end окно добавлния поинта */
 .points_list {
 	display: flex;
 	flex-wrap: wrap;
@@ -41,6 +54,8 @@ body {
 	border: 1px solid green;
 	margin: 3px;
 	position: relative;
+	padding: 3px;
+	background-color: #7fdb39;
 }
 .info_point_on {
 	background-color:#fa2828;
@@ -67,7 +82,8 @@ body {
 	background-color:#bada55;
 	justify-content: space-between;
 }
-/* что-то не центрируется вериткально */
+
+
 .delete_note_this {
 	display: flex;
   justify-content: center;

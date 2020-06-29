@@ -749,7 +749,7 @@ function html_wrap_note_this(value,last_add_purchase_descr='') {
             
               
             $('.points_list').append('<div class="info_point" lan='+value.lan +' lng='+ value.lng +' id_point='+value.id_point+'><span>'+count+'.</span>'+'<span class="name_this_point">'+value.name+'</span>'+
-              '<span class="point_price" alt="последняя цена">'+value[size-5].params_value+'р.</span><div class="wrap_dropdown_info">'+note+'</div></div>');
+              '<span class="point_price" alt="последняя цена" style="display:none">'+value[size-5].params_value+'</span><div class="wrap_dropdown_info">'+note+'</div></div>');
             count++;
             });
             
