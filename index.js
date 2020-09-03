@@ -1,4 +1,120 @@
 $(document).ready(function(){
+  /* авторизация */
+   var user_hash= localStorage.getItem('user_hash');
+ var user_login= localStorage.getItem('user_login');
+  console.log("изначальный user_hash="+ user_hash + " изначальный user_login="+ user_login);
+  if (user_login != null ) {
+    $.ajax({
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'check_user_hash',
+              'user_hash': user_hash,
+              'user_login': user_login
+              
+      },                    
+           success: function(data){
+            console.log("проверка совпадения хеша "+data);
+            if (data == "user_hash_match"){
+               $(".user_login").text(localStorage.getItem('user_login')); // этот блок смены меню надо в функцию
+              $(".avtoriz_form").hide();
+                $(".registration").hide();//кнопка регистрации-- лишнее действие?
+                 $(".row_of_avtirization").hide();
+
+              $(".row_of_user").show();
+            } else { console.log("хеш не совпал!!");}
+           }
+         });//end ajax check_user_hash
+  }
+ 
+ $(".registration").click(function(){
+  $(".reg_form").toggle();
+ });
+
+ $(".reg_button").click(function(){
+  var login=$('[name = "reg_login"]').val();
+  var password=$('[name = "reg_password"]').val();
+  console.log(login);
+  console.log(password);
+    $(".system_tablo_mess").html("");
+  /*  // тут нужна проверка на длинный/короткий логин/пароль
+if (login.length<1) {
+  return;
+}
+ if (password.length<5){
+  return;
+ }
+ */
+    $.ajax({
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'register_new_user',
+              'login': login,
+              'password': password
+              
+      },                    
+           success: function(data){
+            console.log("data="+ data);
+            if (data == "login_have") {
+              $(".system_tablo_mess").html("Пользователь с таким логином уже существует в базе данных");
+            }
+
+            if (data == "saved") {
+              $(".reg_saved").show();
+              $(".reg_form").hide();
+              $(".registration").hide();
+              $(".login_pass").trigger("click");
+            }
+           }
+       });
+
+ });
+ $(".login_pass").click(function(){
+   
+   $(".login_pass").hide();
+  $(".avtoriz_form").toggle();
+
+    $(".enter_log_pass").click(function(){
+      
+      var login= $("[name = 'avtoriz_login']").val();
+      var password= $("[name = 'avtoriz_password']").val();
+       console.log (login +"  " +password);
+       $.ajax({
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'enter_log_pass',
+              'login': login,
+              'password': password
+              
+      },                    
+           success: function(data){
+            if (data == "login/pass is wrong.") {
+             $(".mess_from_log_pass").html(data);
+            } else {
+              $(".mess_from_log_pass").empty();//очистка окна сообщений об ошибочном пароле - для профилактики, на возможный случай ошибки
+           var for_localStorage = JSON.parse(data);
+            console.log("hash="+for_localStorage.user_hash +" login= "+ for_localStorage.user_login);
+            localStorage.setItem('user_hash', for_localStorage.user_hash);
+              localStorage.setItem('user_login', for_localStorage.user_login);
+           var a= localStorage.getItem('user_hash');
+            console.log("считано из user_hash="+a+"считано из user_login= "+ localStorage.getItem('user_login'));
+             $(".user_login").text(localStorage.getItem('user_login'));
+              $(".avtoriz_form").hide();
+                $(".registration").hide();//кнопка регистрации-- лишнее действие?
+                 $(".row_of_avtirization").hide();
+
+              $(".row_of_user").show();
+            }
+           }
+           });
+    });//end .enter_log_pass
+ });
+
+$(".log_out").click(function(){
+   localStorage.clear();
+    location.href=location.href;
+});
+
+  /* end авторизация*/
    current_deficit_to_title();//в title переносит текущий дефицит из select
   $(".add_new_deficit").click(function(){
     $("#add_new_deficit").modal('show');

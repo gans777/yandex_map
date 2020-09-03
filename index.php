@@ -11,9 +11,27 @@
     <link rel="stylesheet" href="css/style.css?rnd=213">
 </head>
 <body>
-	
-
 	<div class="container">
+   <div class="row row_of_avtirization">
+    <div class="col">
+  <button type="button" class="btn btn-primary registration">регистрация</button>
+</div>
+    <div class="col">
+      <button type="button" class="btn btn-primary login_pass">авторизация</button>
+    </div>
+    
+</div>
+ <div class="row row_of_user">
+  <div class="col">
+      <div class="wrap_user_name">
+      <button type="button" class="btn btn-primary user_login"></button>
+      <button type="button" class="btn btn-link log_out">выход</button>
+    </div>
+    </div>
+ </div> 
+  </div>
+
+	<div class="container row_of_user">
         <div class="wrap_header">
 		<div class="wrap_products_name">
 		<div class="products_name">товар:
@@ -179,6 +197,25 @@
   </div>
 </div>
 <!--end.modal для удаления категории(товара-дефицит) при удалении последнего поинта-->
+<!--скрытый html относящийся к авторизации -->
+<!-- фома авторизации -->
+<div class="avtoriz_form">
+  Логин <input name="avtoriz_login" type="text" ><br>
+Пароль <input name="avtoriz_password" type="password" ><br>
+<div class="mess_from_log_pass"></div>
+<button type="button" class="btn btn-secondary enter_log_pass">Войти</button>
+</div>
+<!-- end форма авторизации -->
+  <!-- форма регистрации для авторизации -->
+<div class="reg_form">
+  <div class="system_tablo_mess"></div>
+Логин <input name="reg_login" type="text" ><span></span><br>
+Пароль <input name="reg_password" type="password" ><br>
+<button name="submit"  class="btn btn-secondary reg_button">Зарегистрироваться</button>
+</div>
+<!--end форма регистрации для авторизации -->
+<div class="reg_saved">сохранено</div>
+<!-- end    скрытый html относящийся к авторизации -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js">
  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

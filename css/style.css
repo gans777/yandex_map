@@ -1,6 +1,31 @@
 body {
 	padding: 20px;
 }
+/* авторизация */
+.reg_form {
+	display: none;
+	padding: 25px;
+}
+.reg_saved {
+	display: none;
+	padding: 25px;
+	background-color: #5ac18e;
+}
+.avtoriz_form {
+	display: none;
+	padding: 25px;
+}
+ .mess_from_log_pass{
+ 	color: red;
+ } 
+ .wrap_user_name{
+ 	
+ 	padding: 25px;
+ }
+ .row_of_user{
+ 	display: none;
+ }
+/* end авторизация */
 
 .wrap_map {
 	position:relative;
