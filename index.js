@@ -1,5 +1,44 @@
 $(document).ready(function(){
-  /* авторизация */
+  
+ymaps.ready(init);
+
+});//end.ready
+
+
+//
+function init(){
+     current_deficit_to_title();//в title переносит текущий дефицит из select
+   
+  $(".add_new_deficit").click(function(){
+    $("#add_new_deficit").modal('show');
+  });
+
+  $(".save_new_deficit").click(function(){
+    var name_of_deficit=$("#input_name_deficit").val();
+     if (name_of_deficit.length-1 < 2) { $("#emailHelp").html("<span style=\"color: red;\">слишком короткое наименование</span>");
+  return;
+   }
+     //тут можно проверок поставить на правильное заполнение формы
+     $.ajax({
+        type:'post',
+        url:'ajax/ajaxrequest.php',
+        data:{'label':'add_new_deficit',
+              'name_of_deficit': name_of_deficit
+              
+      },
+           success: function(data){
+             console.log(data); 
+             $("#add_new_deficit").modal('hide');
+                $(".products_name select").append("<option>"+name_of_deficit+"</option>");
+                 var last_option=$(".products_name select>option").length -1;
+                  $('select option:eq('+last_option+')').prop('selected',true);//делает выбранным эту опцию
+                   $('.products_name').trigger('change');// вызывает событие на обработчике событий
+                                         }
+                    });//end ajax
+  });
+  
+
+/* авторизация */
    var user_hash= localStorage.getItem('user_hash');
  var user_login= localStorage.getItem('user_login');
   console.log("изначальный user_hash="+ user_hash + " изначальный user_login="+ user_login);
@@ -99,10 +138,11 @@ if (login.length<1) {
             console.log("считано из user_hash="+a+"считано из user_login= "+ localStorage.getItem('user_login'));
              $(".user_login").text(localStorage.getItem('user_login'));
               $(".avtoriz_form").hide();
-                $(".registration").hide();//кнопка регистрации-- лишнее действие?
+               // $(".registration").hide();//кнопка регистрации-- лишнее действие?
                  $(".row_of_avtirization").hide();
 
               $(".row_of_user").show();
+               read_markers_all(myMap);//рисует все маркеры из категории
             }
            }
            });
@@ -115,39 +155,6 @@ $(".log_out").click(function(){
 });
 
   /* end авторизация*/
-   current_deficit_to_title();//в title переносит текущий дефицит из select
-  $(".add_new_deficit").click(function(){
-    $("#add_new_deficit").modal('show');
-  });
-
-  $(".save_new_deficit").click(function(){
-    var name_of_deficit=$("#input_name_deficit").val();
-     if (name_of_deficit.length-1 < 2) { $("#emailHelp").html("<span style=\"color: red;\">слишком короткое наименование</span>");
-  return;
-   }
-     //тут можно проверок поставить на правильное заполнение формы
-     $.ajax({
-        type:'post',
-        url:'ajax/ajaxrequest.php',
-        data:{'label':'add_new_deficit',
-              'name_of_deficit': name_of_deficit
-              
-      },
-           success: function(data){
-             console.log(data); 
-             $("#add_new_deficit").modal('hide');
-                $(".products_name select").append("<option>"+name_of_deficit+"</option>");
-                 var last_option=$(".products_name select>option").length -1;
-                  $('select option:eq('+last_option+')').prop('selected',true);//делает выбранным эту опцию
-                   $('.products_name').trigger('change');// вызывает событие на обработчике событий
-                                         }
-                    });//end ajax
-  });
-});//end.ready
-
-ymaps.ready(init);
-//
-function init(){
 
       $( ".products_name" ).change(function() { // по какому товару карту выводить
         current_deficit_to_title();
@@ -831,10 +838,20 @@ function html_wrap_note_this(value,last_add_purchase_descr='') {
         type:'post',
         url:'ajax/ajaxrequest.php',
         data:{'label':'read_markers_sql',
+               'hash': localStorage.getItem('user_hash'),
+               'user_login': localStorage.getItem('user_login'),  
               'product': $(".products_name option:selected").text()},
            success: function(data){ 
             console.log('данные из базы'+data);
-            var all_markers = JSON.parse(data);
+            if (data == "not autorization"){
+               console.log("в нутри not autoriztion");
+              $(".row_of_user").hide();
+              $(".row_of_avtirization").show();
+              $(".login_pass").show();
+               return;
+            }
+
+            var all_markers = JSON.parse(data); 
             console.log(all_markers);
              var count=1;
             all_markers.forEach(function(value){

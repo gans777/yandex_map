@@ -21,4 +21,13 @@ function generateCode($length=6) {
     }
     return $code;
 }
+// функция проверки хеша пользователя с хешем в базе
+function check_hash($link,$hash,$user_login){
+  $query = mysqli_query($link, "SELECT user_login FROM deficit_users WHERE user_hash='".mysqli_real_escape_string($link, $hash)."'");
+  $data = mysqli_fetch_assoc($query);
+    if($data['user_login'] === $user_login){
+
+        return $user_login;
+    } else { return "not autorization"; }
+} 
 ?>

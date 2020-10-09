@@ -131,22 +131,14 @@ if ($_POST['label']=='save_new_comment_about_purchase_sql') {
                                  echo json_encode($all_this_note);
 }
 
-if ($_POST['label']=='read_markers'){
-	$dir ="points";
-  $category="drugs";
 
-  $file = file("../$dir/$category.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-  
- echo json_encode($file);
-  
-}
 if ($_POST['label'] =='read_markers_sql'){
-  
-	
-  $product=$_POST['product'];
-
-
-$sql = "SELECT id_point,lan,lng,name FROM deficit_points WHERE product='".$product."'";
+   $hash=$_POST['hash'];
+    $user_login=$_POST['user_login'];
+     $response = check_hash($link,$hash,$user_login);	
+  if ($response == $user_login) {
+   $product=$_POST['product'];
+    $sql = "SELECT id_point,lan,lng,name FROM deficit_points WHERE product='".$product."'";
      $res = mysqli_query($link,$sql);
           $all_points = MysqliFetchAll($res);
        
@@ -174,7 +166,7 @@ $sql = "SELECT id_point,lan,lng,name FROM deficit_points WHERE product='".$produ
    
   
  echo json_encode($all_points);
-  
+ }  else { echo "not autorization";}
 }
 
 if ($_POST['label']=='delete_purchase_descr_sql') {
