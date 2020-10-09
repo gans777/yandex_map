@@ -62,6 +62,11 @@ if ($_POST['label']=='enter_log_pass'){
 /* end авторизация */
 
 if ($_POST['label']=='add_new_deficit'){ 
+  //проверка авторизации
+   if (check_hash($link,$_POST['hash'],$_POST['user_login']) != $_POST['user_login']) {
+    echo "not autorization";
+    return;
+   }
   
   $insert = "INSERT INTO `deficit_products` (name_of_product) VALUES ('".$_POST['name_of_deficit']."')";
   $res = mysqli_query($link,$insert);
@@ -77,7 +82,13 @@ if ($_POST['label']=='save_new_marker_sql') {
     $product=$_POST['product'];
     $category='аптеки';
     $product_price=$_POST['product_price'];
+    // проверка авторизации
+   if (check_hash($link,$_POST['hash'],$_POST['user_login']) != $_POST['user_login']) {
+    echo "not autorization";
+    return;
+   }
     // подключение к mysql
+
 echo "пытаюсь записать $name_point || $lan ||$lng||$product||$category";
   $insert = "INSERT INTO `deficit_points` (lan, lng, name, product, category) VALUES ('".$lan."','".$lng."','".$name_point."','".$product."', '".$category."')";
 

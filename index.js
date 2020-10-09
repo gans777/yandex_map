@@ -23,6 +23,8 @@ function init(){
         type:'post',
         url:'ajax/ajaxrequest.php',
         data:{'label':'add_new_deficit',
+              'hash': localStorage.getItem('user_hash'),
+              'user_login': localStorage.getItem('user_login'),  
               'name_of_deficit': name_of_deficit
               
       },
@@ -613,6 +615,8 @@ $(".points_list").delegate(".delete_this_note", "click", function(){// удал�
         type:'post',
         url:'ajax/ajaxrequest.php',
           data:{'label':'save_new_marker_sql',
+                  'hash': localStorage.getItem('user_hash'),
+                  'user_login': localStorage.getItem('user_login'),  
                   'name_point': name_point,
                   'description_point': description_point,
                   'lan':lan,
